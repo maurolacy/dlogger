@@ -29,11 +29,12 @@ case $1 in
 	start)
 		log_daemon_msg "Starting accelerometer reader" "$GC"
 		echo
+		mkdir -p $BASE/log
 		[ -f /screenlog.0 ] && cp /screenlog.0 $BASE/log/`date '+%Y-%m-%d_%H:%M'`.log
 		screen -L -d -m $BASE/$GC
 	;;
 	stop)
-		log_daemon_msg "Stopping serial geiger client" "$GC"
+		log_daemon_msg "Stopping accelerometer reader" "$GC"
 		echo
 		killall $GC 2>/dev/null
 	;;
