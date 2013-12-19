@@ -1,0 +1,190 @@
+#include <termios.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <time.h>
+#include <sys/signal.h>
+#include <sys/types.h>
+#include <errno.h>
+#include <semaphore.h>
+
+//#define BAUDRATE B38400
+#define BAUDRATE B57600
+//#define BAUDRATE B115200
+#define PORT "/dev/ttyS3"
+#define _POSIX_SOURCE 1 /* POSIX compliant source */
+#define FALSE 0
+#define TRUE 1
+
+volatile int STOP = FALSE;
+
+void signal_handler_IO(int signal, siginfo_t *si, void *ctx); /* definition of signal handler */
+void signal_handler_INT(int status);
+sem_t wait_flag;
+
+struct termios oldtio;
+int fd;
+
+int main(int argc, char **argv) {
+	int opt, x = 0, p = 0, v = 0, nsecs = 60, nmins = 0, res, i, mintot = 0,
+			mins = 0;
+	struct tm t;
+	struct termios newtio;
+	struct sigaction saio; /* definition of signal action */
+	struct sigaction saint;
+	char buf[255];
+	struct timespec ts1, ts2;
+
+	while ((opt = getopt(argc, argv, "d:i:hpvx")) != -1) {
+		switch (opt) {
+		case 'd':
+			nsecs = atoi(optarg);
+			break;
+		case 'i':
+			nmins = atoi(optarg);
+			break;
+		case 'x':
+			x = 1;
+			break;
+		case 'p':
+			p = 1;
+			break;
+		case 'v':
+			v = 1;
+			break;
+		case 'h':
+		default: /* '?' */
+			fprintf(stderr, "Usage: %s [-d nsecs] [-v] [-x]\n", argv[0]);
+			fprintf(stderr,
+					"-d nsecs: number of seconds to collect (default 60)\n");
+			fprintf(stderr,
+					"-i nmins: rounded interval in minutes between samples\n");
+			fprintf(stderr, "-h: this help\n");
+			fprintf(stderr, "-v: verbose output\n");
+			fprintf(stderr, "-x: exit after collecting\n");
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	/* open the device to be non-blocking (read will return immediatly) */
+	fd = open(PORT, O_RDWR | O_NOCTTY | O_NONBLOCK);
+	if (fd < 0) {
+		perror(PORT);
+		exit(-1);
+	}
+
+	/* install the signal handler before making the device asynchronous */
+	//saio.sa_handler = signal_handler_IO;
+	saio.sa_sigaction = signal_handler_IO;
+	//saio.sa_mask = 0;
+	saio.sa_flags = SA_SIGINFO;
+	saio.sa_restorer = NULL;
+
+	sigaction(SIGIO, &saio, NULL);
+
+	saint.sa_handler = signal_handler_INT;
+	//saint.sa_mask = 0;
+	saint.sa_flags = 0;
+	saint.sa_restorer = NULL;
+	sigaction(SIGINT | SIGTERM | SIGQUIT | SIGABRT, &saint, NULL);
+
+	/* Make the file descriptor asynchronous (the manual page says only
+	 O_APPEND and O_NONBLOCK, will work with F_SETFL...) */
+	fcntl(fd, F_SETFL, FASYNC);
+
+	tcgetattr(fd, &oldtio); /* save current port settings */
+	/* set new port settings for canonical input processing */
+	//newtio.c_cflag = BAUDRATE | CRTSCTS | CS8 | CLOCAL | CREAD;
+	//newtio.c_cflag = CRTSCTS | CREAD;
+	//newtio.c_cflag = CREAD;
+	newtio.c_cflag = BAUDRATE | CLOCAL | CREAD | CS7;
+	//newtio.c_iflag = IGNPAR | ICRNL;
+	newtio.c_iflag = IGNPAR;
+	newtio.c_oflag = 0;
+	//newtio.c_lflag = ICANON;
+	newtio.c_lflag &= ~ICANON;
+	//newtio.c_cc[VMIN] = 1;
+	newtio.c_cc[VMIN] = 1;
+	newtio.c_cc[VTIME] = 0;
+	tcflush(fd, TCIFLUSH);
+	tcsetattr(fd, TCSANOW, &newtio);
+
+	/* initialize the semaphore */
+	if (sem_init(&wait_flag, 0, 0) == -1) {
+		perror("sem_init");
+		exit(EXIT_FAILURE);
+	}
+
+	if (clock_gettime(CLOCK_REALTIME, &ts1) == -1) {
+		perror("clock_gettime");
+		exit(EXIT_FAILURE);
+	}
+	ts1.tv_sec += nsecs;
+
+	/* now allow the process to receive SIGIO */
+	fcntl(fd, F_SETOWN, getpid());
+	while (1) {
+		int s;
+		struct timespec ts2;
+		ts2.tv_sec = ts1.tv_sec;
+		ts2.tv_nsec = ts1.tv_nsec;
+
+		while ((s = sem_timedwait(&wait_flag, &ts2)) == -1 && errno == EINTR) {
+			continue; /* Restart if interrupted by handler */
+		}
+
+		/* Check what happened */
+		if (s < 0) {
+			if (errno == ETIMEDOUT) { // the end
+				mins = mins + nsecs / 60;
+				if (x) {
+					printf("%d\n", mintot);
+					break;
+				} else {
+					printf("%dm: %d\n", mins, mintot);
+					mintot = 0;
+					clock_gettime(CLOCK_REALTIME, &ts1);
+					ts1.tv_sec += nsecs;
+				}
+			} else
+				perror("sem_wait");
+		} else { // data
+			if ((res = read(fd, buf, 255)) < 0) {
+				perror("read");
+				exit(1);
+			}
+			//buf[res]='\0';
+			//for (i=0; i<res; i++)
+			//	fprintf(stderr, "%.2X\n", buf[i]);
+			mintot += res;
+			if (v)
+				printf("%d\n", mintot);
+		}
+	}
+	/* destroy semaphore */
+	sem_destroy(&wait_flag);
+
+	/* restore old port settings */
+	tcsetattr(fd, TCSANOW, &oldtio);
+	return 0;
+}
+
+void signal_handler_IO(int signal, siginfo_t *si, void *ctx) {
+	if (sem_post(&wait_flag) == -1) {
+		write(STDERR_FILENO, "sem_post() failed\n", 18);
+		_exit(EXIT_FAILURE);
+	}
+}
+
+void signal_handler_INT(int status) {
+	fprintf(stderr, "received signal: %d\n", status);
+
+	/* destroy semaphore */
+	sem_destroy(&wait_flag);
+
+	// restore and close serial port
+	tcsetattr(fd, TCSANOW, &oldtio);
+	close(fd);
+	exit(0);
+}
