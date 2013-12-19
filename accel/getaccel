@@ -1,0 +1,44 @@
+#!/bin/sh -e
+### BEGIN INIT INFO
+# Provides:          getaccel
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Obtain accelerometer readings
+### END INIT INFO
+#
+# getaccel		This init.d script is used to read the ADXL345 accelerometer axes
+#			It just calls ~pi/work/dlogger/getaccel1.sh
+
+ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
+CONF=/etc/dlogger.conf
+GC=accel/getaccel1.sh
+
+set -e
+. /lib/lsb/init-functions
+. $CONF
+
+if [ ! -x $BASE/$GC ]
+then
+	echo "No $GC installed"
+	exit 0
+fi
+
+case $1 in
+	start)
+		log_daemon_msg "Starting accelerometer reader" "$GC"
+		echo
+		[ -f /screenlog.0 ] && cp /screenlog.0 $BASE/log/`date '+%Y-%m-%d_%H:%M'`.log
+		screen -L -d -m $BASE/$GC
+	;;
+	stop)
+		log_daemon_msg "Stopping serial geiger client" "$GC"
+		echo
+		killall $GC 2>/dev/null
+	;;
+	*)
+		log_success_msg "Usage: /etc/init.d/getaccel {start|stop}"
+		exit 1
+	;;
+esac
