@@ -4,13 +4,13 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../getSerialAsync.c 
+../encoder.c 
 
 OBJS += \
-./getSerialAsync.o 
+./encoder.o 
 
 C_DEPS += \
-./getSerialAsync.d 
+./encoder.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
