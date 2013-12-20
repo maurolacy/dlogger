@@ -31,7 +31,7 @@ case $1 in
 		echo
 		mkdir -p $BASE/log
 		[ -f /screenlog.0 ] && cp /screenlog.0 $BASE/log/`date '+%Y-%m-%d_%H:%M'`.log
-		screen -L -d -m $BASE/$GC
+		screen -d -m $BASE/$GC
 	;;
 	stop)
 		log_daemon_msg "Stopping accelerometer reader" "$GC"
