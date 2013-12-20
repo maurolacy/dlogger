@@ -5,13 +5,13 @@
 /*
    Rotary encoder connections:
 
-   Encoder A      - gpio 18   (pin P1-12)
-   Encoder B      - gpio 7    (pin P1-26)
+   Encoder A      - gpio 22 (pin P1-15)
+   Encoder B      - gpio 10  (pin P1-19)
    Encoder Common - Pi ground (pin P1-20)
 */
 
-#define ENCODER_A 18
-#define ENCODER_B  7
+#define ENCODER_A 22
+#define ENCODER_B 10
 
 static volatile int encoderPos;
 
