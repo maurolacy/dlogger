@@ -45,7 +45,8 @@ int main(int argc, char * argv[])
       if (pos != encoderPos)
       {
          pos = encoderPos;
-         printf("%d\n", pos);
+         fprintf(stdout, "%d\n", pos);
+         fflush(stdout);
       }
       gpioDelay(10000); /* check pos 100 times per second */
    }
