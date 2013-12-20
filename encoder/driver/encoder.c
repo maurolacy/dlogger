@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stddef.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -8,6 +9,7 @@
 #include <string.h>
 #include <strings.h>
 
+#include <pthread.h>
 
 #define PORT 16001
 #define MAXLINE 128
@@ -27,14 +29,19 @@
 #define ENCODER_B 10
 
 static volatile int encoderPos;
+static volatile int pos;
 
 void encoderPulse(int gpio, int lev, uint32_t tick);
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
-    volatile int pos=0;
-    if (gpioInitialise() < 0)
-        return 1;
+    pthread_t tid;
+    int ret;
+
+    pos=0;
+
+    if ( (ret=gpioInitialise()) < 0)
+        exit(ret);
 
     encoderPos = pos;
 
@@ -51,49 +58,50 @@ int main(int argc, char * argv[])
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servaddr.sin_port = htons(PORT);
 
-    if (fork())
+    if ( (ret=pthread_create(&tid, NULL, read_encoder, NULL)) )
     {
-        // parent
-    	gpioSetMode(ENCODER_A, PI_INPUT);
-    	gpioSetMode(ENCODER_B, PI_INPUT);
-
-    	/* pull up is needed as encoder common is grounded */
-    	gpioSetPullUpDown(ENCODER_A, PI_PUD_UP);
-    	gpioSetPullUpDown(ENCODER_B, PI_PUD_UP);
-
-    	/* monitor encoder level changes */
-    	gpioSetAlertFunc(ENCODER_A, encoderPulse);
-    	gpioSetAlertFunc(ENCODER_B, encoderPulse);
-
-        for(; ;)
-        {
-            if (pos != encoderPos)
-            {
-                pos = encoderPos;
-                printf("pos=%d\n", pos);
-            }
-            gpioDelay(10000); /* check pos 100 times per second */
-        }
-        gpioTerminate();
+        fprintf(stderr, "%s: Can't create thread. Error %d\n", argv[0], ret);
+        exit(ret);
     }
-    else
+
+    // simple sequential server
+    bind(listenfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
+
+    listen(listenfd, LISTENQ);
+    for (; ;)
     {
-	// child
-	printf("child\n");
-        // simple sequential server
-        bind(listenfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
+        connfd = accept(listenfd, NULL, NULL);
 
-        listen(listenfd, LISTENQ);
-        for (; ;)
-        {
-            connfd = accept(listenfd, NULL, NULL);
-
-            snprintf(buff, sizeof(buff), "pos=%d\n", pos);
-            write(connfd, buff, strlen(buff));
-            close(connfd);
-        }
+        snprintf(buff, sizeof(buff), "pos=%d\n", pos);
+        write(connfd, buff, strlen(buff));
+        close(connfd);
     }
     return 0;
+}
+
+void read_encoder()
+{
+    gpioSetMode(ENCODER_A, PI_INPUT);
+    gpioSetMode(ENCODER_B, PI_INPUT);
+
+    /* pull up is needed as encoder common is grounded */
+    gpioSetPullUpDown(ENCODER_A, PI_PUD_UP);
+    gpioSetPullUpDown(ENCODER_B, PI_PUD_UP);
+
+    /* monitor encoder level changes */
+    gpioSetAlertFunc(ENCODER_A, encoderPulse);
+    gpioSetAlertFunc(ENCODER_B, encoderPulse);
+
+    for(; ;)
+    {
+        if (pos != encoderPos)
+        {
+            pos = encoderPos;
+            printf("pos=%d\n", pos);
+        }
+        gpioDelay(10000); /* check pos 100 times per second */
+    }
+    gpioTerminate();
 }
 
 void encoderPulse(int gpio, int level, uint32_t tick)
