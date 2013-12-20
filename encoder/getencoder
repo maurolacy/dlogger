@@ -12,13 +12,21 @@
 
 ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
 CONF=/etc/dlogger.conf
-GC=encoder/getencoder1.sh
 
 set -e
 . /lib/lsb/init-functions
 . $CONF
 
-if [ ! -x $BASE/$GC ]
+GS=$BASE/encoder/driver/Default/encoder
+GC=$BASE/encoder/getencoder1.sh
+
+if [ ! -x $GS ]
+then
+	echo "No $GS installed"
+	exit 0
+fi
+
+if [ ! -x $GC ]
 then
 	echo "No $GC installed"
 	exit 0
@@ -26,14 +34,18 @@ fi
 
 case $1 in
 	start)
+		log_daemon_msg "Starting encoder server" "$GS"
+		cd `basename $GS`
+		screen -d -m $GS
+		sleep 1
 		log_daemon_msg "Starting encoder reader" "$GC"
 		echo
-		screen -L -d -m $BASE/$GC
+		screen -d -m $GC
 	;;
 	stop)
-		log_daemon_msg "Stopping encoder reader" "$GC"
+		log_daemon_msg "Stopping encoder reader and server" "$GC"
 		echo
-		killall `basename $GC` 2>/dev/null
+		killall `basename $GC` `basename $GS` 2>/dev/null
 	;;
 	*)
 		log_success_msg "Usage: /etc/init.d/getencoder {start|stop}"
