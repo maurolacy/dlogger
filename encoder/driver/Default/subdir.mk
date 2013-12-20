@@ -4,16 +4,13 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../encoder.c \
-../mev.c 
+../encoder.c 
 
 OBJS += \
-./encoder.o \
-./mev.o 
+./encoder.o 
 
 C_DEPS += \
-./encoder.d \
-./mev.d 
+./encoder.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
