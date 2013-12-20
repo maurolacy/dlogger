@@ -1,6 +1,18 @@
+#include <stdint.h>
+#include <stddef.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <strings.h>
 
-#include <pigpio.h>
+
+#define PORT 16001
+#define MAXLINE 128
+
+//#include <pigpio.h>
 
 /*
    Rotary encoder connections:
@@ -15,48 +27,74 @@
 
 static volatile int encoderPos;
 
-/* forward declaration */
-
 void encoderPulse(int gpio, int lev, uint32_t tick);
 
 int main(int argc, char * argv[])
 {
-   int pos=0;
+    int listenfd, connfd;
+    struct sockaddr_in servaddr;
 
-   if (gpioInitialise()<0) return 1;
+    char buff[MAXLINE];
 
-   gpioSetMode(ENCODER_A, PI_INPUT);
-   gpioSetMode(ENCODER_B, PI_INPUT);
+    listenfd = socket(AF_INET, SOCK_STREAM, 0);
 
-   /* pull up is needed as encoder common is grounded */
+    bzero(&servaddr, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr.sin_port = htons(PORT);
 
-   gpioSetPullUpDown(ENCODER_A, PI_PUD_UP);
-   gpioSetPullUpDown(ENCODER_B, PI_PUD_UP);
+    volatile int pos=0;
+    bind(listenfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
 
-   encoderPos = pos;
+    if (gpioInitialise() < 0) return 1;
 
-   /* monitor encoder level changes */
+    gpioSetMode(ENCODER_A, PI_INPUT);
+    gpioSetMode(ENCODER_B, PI_INPUT);
 
-   gpioSetAlertFunc(ENCODER_A, encoderPulse);
-   gpioSetAlertFunc(ENCODER_B, encoderPulse);
+    /* pull up is needed as encoder common is grounded */
 
-   while (1)
-   {
-      if (pos != encoderPos)
-      {
-         pos = encoderPos;
-         fprintf(stdout, "%d\n", pos);
-         fflush(stdout);
-      }
-      gpioDelay(10000); /* check pos 100 times per second */
-   }
+    gpioSetPullUpDown(ENCODER_A, PI_PUD_UP);
+    gpioSetPullUpDown(ENCODER_B, PI_PUD_UP);
 
-   gpioTerminate();
+    encoderPos = pos;
+
+    /* monitor encoder level changes */
+
+    gpioSetAlertFunc(ENCODER_A, encoderPulse);
+    gpioSetAlertFunc(ENCODER_B, encoderPulse);
+
+    if (fork())
+    {
+        // parent
+        while (1)
+        {
+            if (pos != encoderPos)
+            {
+                pos = encoderPos;
+//                printf("pos=%d\n", pos);
+            }
+            gpioDelay(20000); /* check pos 50 times per second */
+        }
+        gpioTerminate();
+    }
+    else
+    {
+        // simple sequential server
+        for (; ;)
+        {
+            connfd = accept(listenfd, NULL, NULL);
+
+            snprintf(buff, sizeof(buff), "%d\n", pos);
+            write(connfd, buff, strlen(buff));
+            close(connfd);
+        }
+    }
+    return 0;
 }
 
 void encoderPulse(int gpio, int level, uint32_t tick)
 {
-   /*
+    /*
 
              +---------+         +---------+      0
              |         |         |         |
@@ -70,23 +108,23 @@ void encoderPulse(int gpio, int level, uint32_t tick)
        |         |         |         |
    ----+         +---------+         +---------+  1
 
-   */
+     */
 
-   static int levA=0, levB=0, lastGpio = -1;
+    static int levA=0, levB=0, lastGpio = -1;
 
-   if (gpio == ENCODER_A) levA = level; else levB = level;
+    if (gpio == ENCODER_A) levA = level; else levB = level;
 
-   if (gpio != lastGpio) /* debounce */
-   {
-      lastGpio = gpio;
+    if (gpio != lastGpio) /* debounce */
+    {
+        lastGpio = gpio;
 
-      if ((gpio == ENCODER_A) && (level == 0))
-      {
-         if (!levB) ++encoderPos;
-      }
-      else if ((gpio == ENCODER_B) && (level == 1))
-      {
-         if (levA) --encoderPos;
-      }
-   }
+        if ((gpio == ENCODER_A) && (level == 0))
+        {
+            if (!levB) ++encoderPos;
+        }
+        else if ((gpio == ENCODER_B) && (level == 1))
+        {
+            if (levA) --encoderPos;
+        }
+    }
 }
