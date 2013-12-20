@@ -13,7 +13,7 @@
 
 ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
 CONF=/etc/dlogger.conf
-GC=gpis/getgps1.sh
+GC=gps/getgps1.sh
 
 set -e
 . /lib/lsb/init-functions
@@ -36,7 +36,7 @@ case $1 in
 	stop)
 		log_daemon_msg "Stopping gps reader" "$GC"
 		echo
-		killall $GC 2>/dev/null
+		killall `basename $GC` 2>/dev/null
 	;;
 	*)
 		log_success_msg "Usage: /etc/init.d/getgps {start|stop}"

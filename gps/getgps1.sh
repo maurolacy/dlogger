@@ -2,10 +2,10 @@
 
 . /etc/dlogger.conf
 
-DURATION=2	# seconds
-INTERVAL=10	# seconds
+DURATION=1	# seconds
+INTERVAL=30	# seconds
 
-JSHON=./jshon/jshon
+JSHON=$BASE/gps/jshon/jshon
 
 >/tmp/getgps.log
 while true
@@ -30,13 +30,8 @@ do
 		[ -z "$SPEED" ] && SPEED=`echo $L | $JSHON -e speed -Q`
 		[ -z "$CLIMB" ] && CLIMB=`echo $L | $JSHON -e climb -Q`
 	done </tmp/gps.$$
-	echo "time: $TIME"
-	echo "lat : $LAT"
-	echo "lon : $LON"
-	echo "alt : $ALT"
-	echo "track: $TRACK"
-	echo "speed: $SPEED"
-	echo "climb: $CLIMB"
+	rm -f /tmp/gps.$$
+	echo "time: $TIME, lat: $LAT, lon: $LON, alt: $ALT, track: $TRACK, speed: $SPEED, climb: $CLIMB" | tee -a /tmp/getgps.log
 	mysql -u$US -p$PASS $DB <<EOF
 INSERT INTO \`gps\` (\`time\`, \`lat\`, \`lon\`, \`alt\`, \`track\`, \`speed\`, \`duration\`, \`interval\`) VALUES ($TIME, '$LAT', '$LON', '$ALT', '$TRACK', '$SPEED', '$DURATION', '$INTERVAL');
 EOF
