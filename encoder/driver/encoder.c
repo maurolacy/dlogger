@@ -11,6 +11,7 @@
 
 #define PORT 16001
 #define MAXLINE 128
+#define LISTENQ	1
 
 #include <pigpio.h>
 
@@ -31,29 +32,17 @@ void encoderPulse(int gpio, int lev, uint32_t tick);
 
 int main(int argc, char * argv[])
 {
+    volatile int pos=0;
     if (gpioInitialise() < 0)
         return 1;
 
-    gpioSetMode(ENCODER_A, PI_INPUT);
-    gpioSetMode(ENCODER_B, PI_INPUT);
-
-    /* pull up is needed as encoder common is grounded */
-
-    gpioSetPullUpDown(ENCODER_A, PI_PUD_UP);
-    gpioSetPullUpDown(ENCODER_B, PI_PUD_UP);
-
     encoderPos = pos;
-
-    /* monitor encoder level changes */
-
-    gpioSetAlertFunc(ENCODER_A, encoderPulse);
-    gpioSetAlertFunc(ENCODER_B, encoderPulse);
 
     // server stuff
     int listenfd, connfd;
     struct sockaddr_in servaddr;
 
-    char buff[MAXLINE];
+    char buff[16];
 
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -62,31 +51,44 @@ int main(int argc, char * argv[])
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servaddr.sin_port = htons(PORT);
 
-    volatile int pos=0;
-
     if (fork())
     {
         // parent
-        while (1)
+    	gpioSetMode(ENCODER_A, PI_INPUT);
+    	gpioSetMode(ENCODER_B, PI_INPUT);
+
+    	/* pull up is needed as encoder common is grounded */
+    	gpioSetPullUpDown(ENCODER_A, PI_PUD_UP);
+    	gpioSetPullUpDown(ENCODER_B, PI_PUD_UP);
+
+    	/* monitor encoder level changes */
+    	gpioSetAlertFunc(ENCODER_A, encoderPulse);
+    	gpioSetAlertFunc(ENCODER_B, encoderPulse);
+
+        for(; ;)
         {
             if (pos != encoderPos)
             {
                 pos = encoderPos;
-//                printf("pos=%d\n", pos);
+                printf("pos=%d\n", pos);
             }
-            gpioDelay(20000); /* check pos 50 times per second */
+            gpioDelay(10000); /* check pos 100 times per second */
         }
         gpioTerminate();
     }
     else
     {
+	// child
+	printf("child\n");
         // simple sequential server
         bind(listenfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
+
+        listen(listenfd, LISTENQ);
         for (; ;)
         {
             connfd = accept(listenfd, NULL, NULL);
 
-            snprintf(buff, sizeof(buff), "%d\n", pos);
+            snprintf(buff, sizeof(buff), "pos=%d\n", pos);
             write(connfd, buff, strlen(buff));
             close(connfd);
         }
