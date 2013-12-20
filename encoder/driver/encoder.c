@@ -98,7 +98,7 @@ void *read_encoder(void *arg)
         if (pos != encoderPos)
         {
             pos = encoderPos;
-            printf("pos=%d\n", pos);
+//            printf("pos=%d\n", pos);
         }
         gpioDelay(10000); /* check pos 100 times per second */
     }
