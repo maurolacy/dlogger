@@ -113,8 +113,7 @@ DROP TABLE IF EXISTS `encoder`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `encoder` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `angle` float(6) NOT NULL DEFAULT '0',
-  `speed` float(6) NOT NULL DEFAULT '0',
+  `counts` int(6) NOT NULL DEFAULT '0',
   `duration` smallint(6) NOT NULL DEFAULT '0',
   `interval` smallint(6) NOT NULL DEFAULT '10',
   PRIMARY KEY (`ts`)
