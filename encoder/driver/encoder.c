@@ -31,6 +31,7 @@
 static volatile int encoderPos;
 static volatile int pos;
 
+void *read_encoder(void *);
 void encoderPulse(int gpio, int lev, uint32_t tick);
 
 int main(int argc, char *argv[])
@@ -72,14 +73,14 @@ int main(int argc, char *argv[])
     {
         connfd = accept(listenfd, NULL, NULL);
 
-        snprintf(buff, sizeof(buff), "pos=%d\n", pos);
+        snprintf(buff, sizeof(buff), "%d\n", pos);
         write(connfd, buff, strlen(buff));
         close(connfd);
     }
     return 0;
 }
 
-void read_encoder()
+void *read_encoder(void *arg)
 {
     gpioSetMode(ENCODER_A, PI_INPUT);
     gpioSetMode(ENCODER_B, PI_INPUT);
