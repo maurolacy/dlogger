@@ -36,7 +36,7 @@ case $1 in
 	stop)
 		log_daemon_msg "Stopping accelerometer reader" "$GC"
 		echo
-		killall $GC 2>/dev/null
+		killall `basename $GC` 2>/dev/null
 	;;
 	*)
 		log_success_msg "Usage: /etc/init.d/getaccel {start|stop}"
