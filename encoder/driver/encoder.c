@@ -12,7 +12,7 @@
 #define PORT 16001
 #define MAXLINE 128
 
-//#include <pigpio.h>
+#include <pigpio.h>
 
 /*
    Rotary encoder connections:
@@ -31,22 +31,8 @@ void encoderPulse(int gpio, int lev, uint32_t tick);
 
 int main(int argc, char * argv[])
 {
-    int listenfd, connfd;
-    struct sockaddr_in servaddr;
-
-    char buff[MAXLINE];
-
-    listenfd = socket(AF_INET, SOCK_STREAM, 0);
-
-    bzero(&servaddr, sizeof(servaddr));
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    servaddr.sin_port = htons(PORT);
-
-    volatile int pos=0;
-    bind(listenfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
-
-    if (gpioInitialise() < 0) return 1;
+    if (gpioInitialise() < 0)
+        return 1;
 
     gpioSetMode(ENCODER_A, PI_INPUT);
     gpioSetMode(ENCODER_B, PI_INPUT);
@@ -62,6 +48,21 @@ int main(int argc, char * argv[])
 
     gpioSetAlertFunc(ENCODER_A, encoderPulse);
     gpioSetAlertFunc(ENCODER_B, encoderPulse);
+
+    // server stuff
+    int listenfd, connfd;
+    struct sockaddr_in servaddr;
+
+    char buff[MAXLINE];
+
+    listenfd = socket(AF_INET, SOCK_STREAM, 0);
+
+    bzero(&servaddr, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr.sin_port = htons(PORT);
+
+    volatile int pos=0;
 
     if (fork())
     {
@@ -80,6 +81,7 @@ int main(int argc, char * argv[])
     else
     {
         // simple sequential server
+        bind(listenfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
         for (; ;)
         {
             connfd = accept(listenfd, NULL, NULL);
