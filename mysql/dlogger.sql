@@ -92,12 +92,13 @@ DROP TABLE IF EXISTS `gps`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `gps` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `time` float(9) NOT NULL,
-  `lat` float(6) NOT NULL,
-  `lon` float(6) NOT NULL,
-  `height` float(6) NOT NULL,
-  `speed` float(6) NOT NULL,
-  `heading` float(6) NOT NULL,
+  `time` timestamp NOT NULL,
+  `lat` float(6) DEFAULT NULL,
+  `lon` float(6) DEFAULT NULL,
+  `alt` float(3) DEFAULT NULL,
+  `track` float(4) DEFAULT NULL,
+  `speed` float(3) DEFAULT NULL,
+  `climb` float(3) DEFAULT NULL,
   `duration` smallint(6) NOT NULL DEFAULT '0',
   `interval` smallint(6) NOT NULL DEFAULT '30',
   PRIMARY KEY (`ts`)
