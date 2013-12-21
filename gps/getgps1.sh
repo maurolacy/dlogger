@@ -3,7 +3,7 @@
 . /etc/dlogger.conf
 
 DURATION=1	# seconds
-INTERVAL=30	# seconds
+INTERVAL=2	# seconds
 
 JSHON=$BASE/gps/jshon/jshon
 
@@ -35,5 +35,6 @@ do
 	mysql -u$US -p$PASS $DB <<EOF
 INSERT INTO \`gps\` (\`time\`, \`lat\`, \`lon\`, \`alt\`, \`track\`, \`speed\`, \`duration\`, \`interval\`) VALUES ($TIME, '$LAT', '$LON', '$ALT', '$TRACK', '$SPEED', '$DURATION', '$INTERVAL');
 EOF
-	sleep $[INTERVAL - $DURATION]
+	D=$[INTERVAL - $DURATION]
+	[ $D -gt 0 ] && sleep $D
 done

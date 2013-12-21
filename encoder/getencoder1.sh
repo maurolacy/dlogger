@@ -3,7 +3,7 @@
 . /etc/dlogger.conf
 
 DURATION=0	# seconds
-INTERVAL=3	# seconds
+INTERVAL=2	# seconds
 
 PORT=16001
 

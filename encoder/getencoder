@@ -35,7 +35,6 @@ fi
 case $1 in
 	start)
 		log_daemon_msg "Starting encoder server" "$GS"
-		cd `basename $GS`
 		screen -d -m $GS
 		sleep 1
 		log_daemon_msg "Starting encoder reader" "$GC"

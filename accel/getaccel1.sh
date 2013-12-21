@@ -3,7 +3,7 @@
 . /etc/dlogger.conf
 
 DURATION=1	# seconds
-INTERVAL=30	# seconds
+INTERVAL=2	# seconds
 
 >/tmp/getaccel.log
 while true
@@ -17,5 +17,6 @@ do
 	mysql -u$US -p$PASS $DB <<EOF
 INSERT INTO \`accel\` (\`x\`, \`y\`, \`z\`, \`duration\`, \`interval\`) VALUES ('$X', '$Y', '$Z', '$DURATION', '$INTERVAL');
 EOF
-	sleep $[INTERVAL - $DURATION]
+	D=$[INTERVAL - $DURATION]
+	[ $D -gt 0 ] && sleep $D
 done
