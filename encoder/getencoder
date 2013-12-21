@@ -35,6 +35,7 @@ fi
 case $1 in
 	start)
 		log_daemon_msg "Starting encoder server" "$GS"
+		rm -f /var/run/pigpio.pid
 		screen -d -m $GS
 		sleep 1
 		log_daemon_msg "Starting encoder reader" "$GC"
@@ -45,6 +46,7 @@ case $1 in
 		log_daemon_msg "Stopping encoder reader and server" "$GC"
 		echo
 		killall `basename $GC` `basename $GS` 2>/dev/null
+		rm -f /var/run/pigpio.pid
 	;;
 	*)
 		log_success_msg "Usage: /etc/init.d/getencoder {start|stop}"

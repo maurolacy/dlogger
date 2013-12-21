@@ -133,11 +133,11 @@ void encoderPulse(int gpio, int level, uint32_t tick)
 
         if ((gpio == ENCODER_A) && (level == 0))
         {
-            if (!levB) ++encoderPos;
+            if (!levB) --encoderPos;
         }
         else if ((gpio == ENCODER_B) && (level == 1))
         {
-            if (levA) --encoderPos;
+            if (levA) ++encoderPos;
         }
     }
 }
