@@ -1,9 +1,2 @@
 - better interface(python) for mysql logging
 - better log/ logs management
-
-- gps
-	- driver
-- encoder
-	- protocol
-	- driver
-
