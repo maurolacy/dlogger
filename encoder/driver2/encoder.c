@@ -15,6 +15,7 @@
 #define MAXLINE 128
 #define LISTENQ 1
 
+#include <wiringPi.h>
 #include "rotaryencoder.h"
 
 #define ENCODER_A   22
