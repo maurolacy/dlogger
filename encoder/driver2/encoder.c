@@ -21,10 +21,7 @@
 
 int main(int argc, char *argv[])
 {
-    pthread_t tid;
     int ret;
-
-    pos=0;
 
     if ( (ret=wiringPiSetupGpio()) < 0)
         exit(ret);
@@ -52,7 +49,7 @@ int main(int argc, char *argv[])
     {
         connfd = accept(listenfd, NULL, NULL);
 
-        snprintf(buff, sizeof(buff), "%d\n", encoder->value >> 2);
+        snprintf(buff, sizeof(buff), "%ld\n", encoder->value >> 2);
         write(connfd, buff, strlen(buff));
         close(connfd);
     }
