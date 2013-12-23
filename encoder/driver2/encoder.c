@@ -9,8 +9,6 @@
 #include <string.h>
 #include <strings.h>
 
-#include <pthread.h>
-
 #define PORT 16001
 #define MAXLINE 128
 #define LISTENQ 1
@@ -20,10 +18,6 @@
 
 #define ENCODER_A   22
 #define ENCODER_B   10
-
-static volatile int pos;
-
-void *read_encoder(void *);
 
 int main(int argc, char *argv[])
 {
@@ -35,7 +29,7 @@ int main(int argc, char *argv[])
     if ( (ret=wiringPiSetupGpio()) < 0)
         exit(ret);
 
-//    encoderPos = pos;
+    struct encoder *encoder = setupencoder(ENCODER_A, ENCODER_B);
 
     // server stuff
     int listenfd, connfd;
@@ -50,12 +44,6 @@ int main(int argc, char *argv[])
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servaddr.sin_port = htons(PORT);
 
-    if ( (ret=pthread_create(&tid, NULL, read_encoder, NULL)) )
-    {
-        fprintf(stderr, "%s: Can't create thread. Error %d\n", argv[0], ret);
-        exit(ret);
-    }
-
     // simple sequential server
     bind(listenfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
 
@@ -64,20 +52,9 @@ int main(int argc, char *argv[])
     {
         connfd = accept(listenfd, NULL, NULL);
 
-        snprintf(buff, sizeof(buff), "%d\n", pos);
+        snprintf(buff, sizeof(buff), "%d\n", encoder->value >> 2);
         write(connfd, buff, strlen(buff));
         close(connfd);
     }
     return 0;
-}
-
-void *read_encoder(void *arg)
-{
-    struct encoder *encoder = setupencoder(ENCODER_A, ENCODER_B);
-    for(; ;)
-    {
-//        printf("%ld\n", encoder->value>>2);
-        pos = encoder->value >> 2;
-        usleep(10000);
-    }
 }
