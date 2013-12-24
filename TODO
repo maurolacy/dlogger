@@ -1,3 +1,4 @@
-- better interface(python) for mysql logging
-- better log/ logs management
-    ~/work/dlogger/logs
+- better interface(python/C) for mysql logging
+- encoder:
+    rotary-encoder kernel driver
+        modify params (gpio_a, gpio_b)
