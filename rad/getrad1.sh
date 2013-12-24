@@ -1,6 +1,7 @@
 #!/bin/bash
 
 . /etc/dlogger.conf
+LOG=$BASE/logs/`basename $0 .sh`.log
 
 DURATION=60	# seconds
 INTERVAL=60	# seconds
@@ -13,12 +14,12 @@ echo -n "Sleeping 1 minute for calibration..."
 sleep 60
 echo "done."
 
->/tmp/getrad.log
+>$LOG
 while true
 do
-date | tee -a /tmp/getrad.log
-COUNT=`$BASE/rad/serial/getSerialAsync -d $DURATION -x 2>>/tmp/getrad.log`
-echo $COUNT | tee -a /tmp/getrad.log
+date | tee -a $LOG
+COUNT=`$BASE/rad/serial/getSerialAsync -d $DURATION -x 2>>$LOG`
+echo $COUNT | tee -a $LOG
 mysql -u$US -p$PASS $DB <<EOF
 INSERT INTO \`rad\` (\`count\`, \`duration\`, \`interval\`) VALUES ('$COUNT', '$DURATION', '$INTERVAL');
 EOF

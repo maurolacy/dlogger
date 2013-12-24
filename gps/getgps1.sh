@@ -1,16 +1,17 @@
 #!/bin/bash
 
 . /etc/dlogger.conf
+LOG=$BASE/logs/`basename $0 .sh`.log
 
 DURATION=1	# seconds
 INTERVAL=2	# seconds
 
 JSHON=$BASE/gps/jshon/jshon
 
->/tmp/getgps.log
+>$LOG
 while true
 do
-	date | tee -a /tmp/getgps.log
+	date | tee -a $LOG
 	TIME=""
 	LAT=""
 	LON=""
@@ -31,7 +32,7 @@ do
 		[ -z "$CLIMB" ] && CLIMB=`echo $L | $JSHON -e climb -Q`
 	done </tmp/gps.$$
 	rm -f /tmp/gps.$$
-	echo "time: $TIME, lat: $LAT, lon: $LON, alt: $ALT, track: $TRACK, speed: $SPEED, climb: $CLIMB" | tee -a /tmp/getgps.log
+	echo "time: $TIME, lat: $LAT, lon: $LON, alt: $ALT, track: $TRACK, speed: $SPEED, climb: $CLIMB" | tee -a $LOG
 	mysql -u$US -p$PASS $DB <<EOF
 INSERT INTO \`gps\` (\`time\`, \`lat\`, \`lon\`, \`alt\`, \`track\`, \`speed\`, \`duration\`, \`interval\`) VALUES ($TIME, '$LAT', '$LON', '$ALT', '$TRACK', '$SPEED', '$DURATION', '$INTERVAL');
 EOF

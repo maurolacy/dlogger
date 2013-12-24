@@ -1,16 +1,17 @@
 #!/bin/bash
 
 . /etc/dlogger.conf
+LOG=$BASE/logs/`basename $0 .sh`.log
 
 DURATION=1	# seconds
 INTERVAL=2	# seconds
 
->/tmp/getaccel.log
+>$LOG
 while true
 do
-	date | tee -a /tmp/getaccel.log
-	L=`$BASE/accel/accel1.py 2>>/tmp/getaccel.log`
-	echo $L | tee -a /tmp/getaccel.log
+	date | tee -a $LOG
+	L=`$BASE/accel/accel1.py 2>>$LOG`
+	echo $L | tee -a $LOG
 	X=`echo $L | cut -f1 -d\ `
 	Y=`echo $L | cut -f2 -d\ `
 	Z=`echo $L | cut -f3 -d\ `
