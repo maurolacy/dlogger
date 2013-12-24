@@ -1,6 +1,7 @@
 #!/bin/bash
 
 . /etc/counts.conf
+LOG=$BASE/logs/`basename $0 .sh`.log
 
 DURATION=60 # seconds
 INTERVAL=0	# minutes
