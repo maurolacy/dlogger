@@ -14,7 +14,7 @@ echo -n "Sleeping 1 minute for calibration..."
 sleep 60
 echo "done."
 
->$LOG
+[ -f "$LOG" ] && mv -f $LOG $LOG.bak
 while true
 do
 date | tee -a $LOG

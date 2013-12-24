@@ -6,7 +6,7 @@ LOG=$BASE/logs/`basename $0 .sh`.log
 DURATION=1	# seconds
 INTERVAL=2	# seconds
 
->$LOG
+[ -f "$LOG" ] && mv -f $LOG $LOG.bak
 while true
 do
 	date | tee -a $LOG

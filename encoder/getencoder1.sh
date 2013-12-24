@@ -8,7 +8,8 @@ INTERVAL=2	# seconds
 
 PORT=16001
 
->$LOG
+[ -f "$LOG" ] && mv -f $LOG $LOG.bak
+
 COUNTS=0
 OLDCOUNTS=0
 while true

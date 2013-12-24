@@ -17,6 +17,8 @@ mkdir -p $BASE/capture
 X=119
 Y=174
 
+[ -f "$LOG" ] && mv -f $LOG $LOG.bak
+
 while true
 do
 	date

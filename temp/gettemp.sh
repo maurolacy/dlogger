@@ -6,6 +6,7 @@ LOG=$BASE/logs/`basename $0 .sh`.log
 DURATION=5  # seconds
 INTERVAL=60 # seconds
 
+[ -f "$LOG" ] && mv -f $LOG $LOG.bak
 while true
 do
 	date

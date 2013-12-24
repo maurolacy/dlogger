@@ -8,7 +8,7 @@ INTERVAL=2	# seconds
 
 JSHON=$BASE/gps/jshon/jshon
 
->$LOG
+[ -f "$LOG" ] && mv -f $LOG $LOG.bak
 while true
 do
 	date | tee -a $LOG
