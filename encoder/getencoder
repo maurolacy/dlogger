@@ -17,7 +17,7 @@ set -e
 . /lib/lsb/init-functions
 . $CONF
 
-GS=$BASE/encoder/driver/Default/encoder
+GS=$BASE/encoder/driver2/Default/encoder
 GC=$BASE/encoder/getencoder1.sh
 
 if [ ! -x $GS ]
