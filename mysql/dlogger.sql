@@ -1,4 +1,3 @@
--- MySQL dump 10.13  Distrib 5.5.31, for debian-linux-gnu (i686)
 --
 -- Host: localhost    Database: dlogger
 -- ------------------------------------------------------
@@ -19,7 +18,10 @@
 -- Table structure for table `temp`
 --
 
-CREATE TABLE IF NOT EXISTS `temp` (
+DROP TABLE IF EXISTS `temp`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `temp` (
   `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `c` float(4) NOT NULL,
   `duration` smallint(6) NOT NULL default '0',
@@ -31,7 +33,10 @@ CREATE TABLE IF NOT EXISTS `temp` (
 -- Table structure for table `pressure`
 --
 
-CREATE TABLE IF NOT EXISTS `pressure` (
+DROP TABLE IF EXISTS `pressure`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pressure` (
   `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `mb` int(4) NOT NULL,
   `duration` smallint(6) NOT NULL default '0',
@@ -56,7 +61,10 @@ CREATE TABLE `rad` (
 -- Table structure for table `X`
 --
 
-CREATE TABLE IF NOT EXISTS `X` (
+DROP TABLE IF EXISTS `X`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `X` (
   `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `julian` float(6) NOT NULL,
   `seconds` smallint(6) NOT NULL,
