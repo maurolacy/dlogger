@@ -9,7 +9,6 @@
 ### END INIT INFO
 #
 # getpart		This init.d script is used to start serial particle counter readings.
-set -x
 
 ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
 CONF=/etc/dlogger.conf
@@ -30,7 +29,7 @@ case $1 in
 		log_daemon_msg "Starting serial particle counter client" "$PART"
 		echo
 		[ -f /screenlog.0 ] && cp /screenlog.0 $BASE/log/`date '+%Y-%m-%d_%H:%M'`.log
-		echo screen -L -d -m $BASE/$PART
+		screen -L -d -m $BASE/$PART
 	;;
 	stop)
 		log_daemon_msg "Stopping serial particle counter client" "$PART"
