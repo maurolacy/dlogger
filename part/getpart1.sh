@@ -28,11 +28,11 @@ do
 	else
 		LON=`echo $LON | sed 's/.$//'`
 	fi
-	COUNT1=`echo $L | cut -d, -f5`
-	COUNT2=`echo $L | cut -d, -f6`
-	COUNT3=`echo $L | cut -d, -f7`
-	echo $ID $HOUR $LAT $LON: $COUNT1 $COUNT2 $COUNT3 | tee -a $LOG
+	DRIFT=`echo $L | cut -d, -f5`
+	SPEED=`echo $L | cut -d, -f6`
+	PARTS=`echo $L | cut -d, -f7`
+	echo $HOUR $LAT $LON $DRIFT $SPEED: $PARTS | tee -a $LOG
 	mysql -u$US -p$PASS $DB <<EOF
-INSERT INTO \`part\` (\`id\`, \`hour\`, \`lat\`, \`lon\`, \`count1\`, \`count2\`, \`count3\`, \`duration\`, \`interval\`) VALUES ('$ID', '$HOUR', '$LAT', '$LON', '$COUNT1', '$COUNT2', '$COUNT3', '$DURATION', '$INTERVAL');
+INSERT INTO \`part\` (\`hour\`, \`lat\`, \`lon\`, \`drift\`, \`speed\`, \`particles\`, \`duration\`, \`interval\`) VALUES ('$HOUR', '$LAT', '$LON', '$DRIFT', '$SPEED', '$PARTS', '$DURATION', '$INTERVAL');
 EOF
 done
