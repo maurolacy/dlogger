@@ -1,0 +1,21 @@
+cd conf
+./conf.sh
+cd ..
+cd mysql
+./dlogger.sh
+cd ..
+cd /etc/init.d
+sudo ln -s /home/pi/work/dlogger/part/getpart
+cd -
+vim /etc/rc.local
+# editar el archivo /etc/rc.local como root
+sudo vim /etc/rc.local
+# Agregar la línea:
+service getpart start
+# antes del 'exit 0'
+# Reiniciar
+sudo reboot
+
+# Instalar apache2
+cd httpd
+sudo ./install_publish.sh
