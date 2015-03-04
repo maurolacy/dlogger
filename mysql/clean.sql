@@ -21,3 +21,4 @@ DELETE FROM `X`;
 DELETE FROM `accel`;
 DELETE FROM `gps`;
 DELETE FROM `encoder`;
+DELETE FROM `part`;

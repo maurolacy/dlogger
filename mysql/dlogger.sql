@@ -127,3 +127,24 @@ CREATE TABLE `encoder` (
   PRIMARY KEY (`ts`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+-- Table structure for table `part`
+--
+
+DROP TABLE IF EXISTS `part`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `part` (
+  `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `id` int(6) NOT NULL DEFAULT '0',
+  `hour` int(6) NOT NULL DEFAULT '0',
+  `lat` float(4) NOT NULL DEFAULT '0',
+  `lon` float(4) NOT NULL DEFAULT '0',
+  `count1` int(6) NOT NULL DEFAULT '0',
+  `count2` float(4) NOT NULL DEFAULT '0',
+  `count3` int(6) NOT NULL DEFAULT '0',
+  `duration` smallint(6) NOT NULL DEFAULT '0',
+  `interval` smallint(6) NOT NULL DEFAULT '30',
+  PRIMARY KEY (`ts`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
