@@ -15,9 +15,9 @@ stty $PART_SPEED <$PART_PORT
 C=0
 cat <$PART_PORT | while read L
 do
-    C=$[C + 1]
 	ID=`echo $L | cut -d, -f1`
     [ -z "$ID" ] && continue
+    C=$[C + 1]
 	HOUR=`echo $L | cut -d, -f2`
 	LAT=`echo $L | cut -d, -f3`
 	if echo $LAT | grep -q 'S$'
@@ -36,8 +36,8 @@ do
 	DRIFT=`echo $L | cut -d, -f5`
 	SPEED=`echo $L | cut -d, -f6`
 	PARTS=`echo $L | cut -d, -f7`
-    echo $HOUR $LAT $LON $DRIFT $SPEED: $PARTS | tee -a $LOG
-    if [ $PARTS -gt 0 -o $C -eq $I ]
+    echo $C: $HOUR $LAT $LON $DRIFT $SPEED: $PARTS | tee -a $LOG
+    if [ $PARTS -gt 0 -o $C -ge $I ]
     then
         mysql -u$US -p$PASS $DB <<EOF
 INSERT INTO \`part\` (\`hour\`, \`lat\`, \`lon\`, \`drift\`, \`speed\`, \`particles\`, \`duration\`, \`interval\`) VALUES ('$HOUR', '$LAT', '$LON', '$DRIFT', '$SPEED', '$PARTS', '$DURATION', '$INTERVAL');
