@@ -12,6 +12,7 @@ stty $PART_SPEED <$PART_PORT
 cat <$PART_PORT | while read L
 do
 	ID=`echo $L | cut -d, -f1`
+    [ -z "$ID" ] && continue
 	HOUR=`echo $L | cut -d, -f2`
 	LAT=`echo $L | cut -d, -f3`
 	if echo $LAT | grep -q 'S$'
