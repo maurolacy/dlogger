@@ -34,7 +34,8 @@ case $1 in
 	stop)
 		log_daemon_msg "Stopping serial particle counter client" "$PART"
 		echo
-		killall `basename $PART` 2>/dev/null
+#		killall `basename $PART` 2>/dev/null
+        kill `ps -ef | grep SCREEN | grep getpart1.sh | awk '{print $2}'` 2>/dev/null
 	;;
 	*)
 		log_success_msg "Usage: /etc/init.d/getpart {start|stop}"
