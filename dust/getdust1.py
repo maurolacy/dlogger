@@ -73,5 +73,5 @@ if __name__ == "__main__":
             # TODO: implement
             pass
         elif mode == 'table':
-            print "%d %.2f %d" % (time.time(), ratio, pcs)
+            print "%d %.2f %d" % (time.time(), ratio*100, pcs)
     GPIO.cleanup()
