@@ -5,5 +5,5 @@
         modify params (gpio_a, gpio_b)
 
 - partículas/cenizas
-    plot
-    web server pub
+
+- duster
