@@ -1,0 +1,44 @@
+#!/bin/sh -e
+### BEGIN INIT INFO
+# Provides:          getdust
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/stop dust counter readings
+### END INIT INFO
+#
+# getdust		This init.d script is used to start dust counter readings.
+
+ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
+CONF=/etc/dlogger.conf
+DUST=dust/getdust1.py
+
+set -e
+. /lib/lsb/init-functions
+. $CONF
+
+if [ ! -x $BASE/$DUST ]
+then
+	echo "No $DUST installed"
+	exit 0
+fi
+
+case $1 in
+	start)
+		log_daemon_msg "Starting dust counter client" "$DUST"
+		echo
+		[ -f /screenlog.0 ] && cp /screenlog.0 $BASE/log/`date '+%Y-%m-%d_%H:%M'`.log
+		screen -L -d -m $BASE/$DUST
+	;;
+	stop)
+		log_daemon_msg "Stopping dust counter client" "$DUST"
+		echo
+#		killall `basename $DUST` 2>/dev/null
+        kill `ps -ef | grep SCREEN | grep `basename $DUST` | awk '{print $2}'` 2>/dev/null
+	;;
+	*)
+		log_success_msg "Usage: /etc/init.d/getdust {start|stop}"
+		exit 1
+	;;
+esac
