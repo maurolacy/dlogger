@@ -14,6 +14,8 @@
 ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
 CONF=/etc/dlogger.conf
 DUST=dust/getdust1.py
+#ARGS="-m mysql"
+ARGS="-m table"
 
 set -e
 . /lib/lsb/init-functions
@@ -30,7 +32,7 @@ case $1 in
 		log_daemon_msg "Starting dust counter client" "$DUST"
 		echo
 		[ -f /screenlog.0 ] && cp /screenlog.0 $BASE/log/`date '+%Y-%m-%d_%H:%M'`.log
-		screen -L -d -m $BASE/$DUST
+		screen -L -d -m $BASE/$DUST $ARGS
 	;;
 	stop)
 		log_daemon_msg "Stopping dust counter client" "$DUST"

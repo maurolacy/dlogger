@@ -16,6 +16,7 @@
 """
 import RPi.GPIO as GPIO
 import time
+import sys
 
 pin = 23 # GPIO BCM
 delay = .0001 # [seconds]
@@ -25,7 +26,24 @@ def setup():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(pin, GPIO.IN)
 
+def usage():
+    print "Usage: %s [-m mode]\n-m: output mode\n  stdout: standard output(default)\n  mysql : mysql db(data logger)\n  table : tabular(standard output)"
+    sys.exit(1)
+
 if __name__ == "__main__":
+    mode='stdout' # default
+    if len(sys.argv) > 1:
+        if sys.argv[1] in ('-h', '--help'):
+            usage()
+        if sys.argv[1] == "-m":
+            if len(sys.argv) != 3:
+                usage()
+            mode = sys.argv[2]
+            if mode not in ('stdout', 'mysql', 'table'):
+                usage()
+        else:
+            usage()
+
     setup()
     level = oldLevel = True
 
@@ -49,5 +67,11 @@ if __name__ == "__main__":
 #           print 'timer:', timer
         ratio = lowTime / interval
         pcs = 3.5314667 * (49896.9 * ratio + 5154.98 * ratio**2 + 814480. * ratio**3)
-        print "Low pulse occupancy: %f%%. Concentration: %d pcs/L" % (ratio*100, pcs)
+        if mode == 'stdout':
+            print "Low pulse occupancy: %.2f%%. Concentration: %d pcs/L" % (ratio*100, pcs)
+        elif mode == 'mysql':
+            # TODO: implement
+            pass
+        elif mode == 'table':
+            print "%d %.2f %d" % (time.time(), ratio, pcs)
     GPIO.cleanup()
