@@ -14,12 +14,14 @@
 ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
 CONF=/etc/dlogger.conf
 DUST=dust/getdust1.py
-#ARGS="-m mysql"
-ARGS="-m table"
+
+#ARGS="-m table"
+ARGS="-m mysql"
 
 set -e
 . /lib/lsb/init-functions
 . $CONF
+export DB US PASS
 
 if [ ! -x $BASE/$DUST ]
 then

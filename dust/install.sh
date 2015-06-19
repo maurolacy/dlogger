@@ -4,7 +4,7 @@ WD=`pwd`
 
 # Instalar python 2.7
 sudo apt-get update
-sudo apt-get install screen python2.7
+sudo apt-get install screen python2.7 python-mysqldb
 
 # Instalar apache2
 #cd ../httpd
