@@ -9,6 +9,7 @@
 ### END INIT INFO
 #
 # getdust		This init.d script is used to start dust counter readings.
+#set -x
 
 ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
 CONF=/etc/dlogger.conf
@@ -34,8 +35,9 @@ case $1 in
 	stop)
 		log_daemon_msg "Stopping dust counter client" "$DUST"
 		echo
-#		killall `basename $DUST` 2>/dev/null
-        kill `ps -ef | grep SCREEN | grep `basename $DUST` | awk '{print $2}'` 2>/dev/null
+        D=`basename $DUST`
+#		killall $D 2>/dev/null
+        kill `ps -ef | grep SCREEN | grep $D | awk '{print $2}'` 2>/dev/null
 	;;
 	*)
 		log_success_msg "Usage: /etc/init.d/getdust {start|stop}"
