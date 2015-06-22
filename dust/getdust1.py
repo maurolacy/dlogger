@@ -71,7 +71,7 @@ if __name__ == "__main__":
         timer = 0.
         lowTime = 0.
         cycleStart = time.time()
-        start = 0.
+        start = cycleStart
         while timer < sampleTime:
             level = GPIO.input(pin)
             t = time.time()
@@ -86,6 +86,8 @@ if __name__ == "__main__":
             time.sleep(delay)
 #           print 'timer:', timer
         ratio = lowTime / sampleTime
+        if ratio > 1.:
+            ratio = 1.
         pcs = 3.5314667 * (49896.9 * ratio + 5154.98 * ratio**2 + 814480. * ratio**3)
         if mode == 'stdout':
             print "Low pulse occupancy: %.2f%%. Concentration: %d pcs/L" % (ratio*100, pcs)
