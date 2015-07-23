@@ -163,3 +163,19 @@ CREATE TABLE `dust` (
   PRIMARY KEY (`ts`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+-- Table structure for table `pressure`
+--
+
+DROP TABLE IF EXISTS `pressure`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pressure` (
+  `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `temp` float(4) NOT NULL DEFAULT '0',
+  `pressure` int(6) NOT NULL DEFAULT '0',
+  `duration` smallint(6) NOT NULL DEFAULT '0',
+  `interval` smallint(6) NOT NULL DEFAULT '30',
+  PRIMARY KEY (`ts`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
