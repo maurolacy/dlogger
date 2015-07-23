@@ -172,8 +172,8 @@ DROP TABLE IF EXISTS `pressure`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pressure` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `temp` float(4) NOT NULL DEFAULT '0',
-  `pressure` int(6) NOT NULL DEFAULT '0',
+  `temp` float(1) NOT NULL DEFAULT '0',
+  `pressure` float(2) NOT NULL DEFAULT '0',
   `duration` smallint(6) NOT NULL DEFAULT '0',
   `interval` smallint(6) NOT NULL DEFAULT '30',
   PRIMARY KEY (`ts`)
