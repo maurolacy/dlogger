@@ -41,7 +41,7 @@ def setup_db(db, user, password):
     return db.cursor()
 
 def usage():
-    print "Usage: %s [-m mode]\n-m: output mode\n  stdout: standard output(default)\n  mysql : mysql db(data logger)\n  table : tabular(standard output)"
+    print "Usage: %s [-m mode]\n-m: output mode\n  stdout: standard output(default)\n  mysql : mysql db(data logger)\n  table : tabular(standard output)" % sys.argv[1]
     sys.exit(1)
 
 if __name__ == "__main__":
