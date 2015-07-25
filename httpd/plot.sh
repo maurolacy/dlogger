@@ -17,7 +17,7 @@ FIELD="$1"
 [ -z "$FIELD" ] && FIELD=$TABLE
 
 mysql -u$US -p$PASS $DB <<EOF >${FIELD}_$DATE.txt
-SELECT \`ts\`, \`$FIELD\` FROM \`$TABLE\` WHERE \`ts\` > '$DATE1' AND \`ts\` < '$DATE2';
+SELECT \`ts\`, \`$FIELD\` FROM \`$TABLE\` WHERE \`ts\` > '$DATE1' AND \`ts\` < '$DATE2' ORDER BY \`ts\`;
 EOF
 
 sed "s/%MONTH_YEAR%/$MONTH_YEAR/;s/%DATE%/$DATE/;s/%FIELD%/$FIELD/" ${FIELD}.plot >${FIELD}_$DATE.plot
