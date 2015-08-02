@@ -5,11 +5,11 @@ set timefmt "%Y-%m-%d %H:%M:%S"
 #set format x '%j'
 #set format y "%t"
 set format x '%d/%m'
-set xlabel "Fecha"
-set ylabel "Presión [hPa]"
+set xlabel "Date"
+set ylabel "Pressure [hPa]"
 #set angles degrees
 set datafile separator "\t"
-set title "Presión Atmosférica. %MONTH_YEAR%" offset 0,-1
+set title "Atmospheric Pressure. %MONTH_YEAR%" offset 0,-1
 #set term png transparent size 1280, 800
 set term png size 1024, 768
 set grid
