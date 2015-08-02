@@ -4,7 +4,7 @@
 
 echo -n "Installing httpd server..."
 echo
-#sudo apt-get update
+sudo apt-get update
 sudo apt-get -y install apache2 gnuplot
 echo "done."
 echo -n "Creating data dir '$DATA'..."
