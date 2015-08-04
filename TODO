@@ -1,5 +1,3 @@
-- better interface(python/C) for mysql logging
-
 - encoder:
     rotary-encoder kernel driver
         modify params (gpio_a, gpio_b)
@@ -7,3 +5,5 @@
 - partículas/cenizas
 
 - duster
+	client/server architecture
+	GUI client
