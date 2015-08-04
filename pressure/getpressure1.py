@@ -16,7 +16,7 @@ import bmp180
 bus = 1
 cache = 1 # [seconds]
 oversampling_mode = bmp180.OS_MODE_8
-interval = 30 # [seconds]
+interval = 300 # [seconds]
 
 def setup_db(db, user, password):
     import MySQLdb
