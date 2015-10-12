@@ -39,10 +39,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#define MAX_TIME 85
-#define DHT11PIN 17
 
-int dht11_val[5]={0,0,0,0,0};
+#define MAX_TIME 85
+#define DHT11PIN 7
+
+int dht11_val[5] = {0};
 
 void dht11_read_val()
 {
@@ -78,19 +79,18 @@ void dht11_read_val()
       j++;
     }
   }
-  // verify cheksum and print the verified data
+  // Verify cheksum and print the verified data
   if((j>=40)&&(dht11_val[4]==((dht11_val[0]+dht11_val[1]+dht11_val[2]+dht11_val[3])& 0xFF)))
   {
-    farenheit=dht11_val[2]*9./5.+32;
-    printf("Humidity = %d.%d %% Temperature = %d.%d *C (%.1f *F)\n",dht11_val[0],dht11_val[1],dht11_val[2],dht11_val[3],farenheit);
+    printf("Temperature: %d.%d °C, Humidity: %d.%d%%\n", dht11_val[2], dht11_val[3], dht11_val[0], dht11_val[1]);
   }
   else
-    printf("Invalid Data!!\n");
+    printf(".\n");
 }
 
 int main(void)
 {
-  printf("Interfacing Temperature and Humidity Sensor (DHT11) With Raspberry Pi\n");
+//  printf("Interfacing Temperature and Humidity Sensor (DHT11) With Raspberry Pi\n");
   if(wiringPiSetup()==-1)
     exit(1);
   while(1)
