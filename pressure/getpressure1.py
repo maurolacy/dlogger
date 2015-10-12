@@ -15,8 +15,12 @@ import bmp180
 
 bus = 1
 cache = 1 # [seconds]
+#oversampling_mode = bmp180.OS_MODE_SINGLE
 oversampling_mode = bmp180.OS_MODE_8
-interval = 300 # [seconds]
+
+interval = 900  # [seconds]
+P_offset =  41. # [mb]
+T_offset =   0. # [°C]
 
 def setup_db(db, user, password):
     import MySQLdb
@@ -66,6 +70,8 @@ if __name__ == '__main__':
 
     while True:
         (P, T) = sensor.pressure_and_temperature
+        P += P_offset
+        T += T_offset
         if mode == 'stdout':
             print "Temperature: %.1f °C, Pressure: %.2f hPa" % (T, P)
         elif mode == 'mysql':
