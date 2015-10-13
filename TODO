@@ -1,8 +1,11 @@
+Use start-stop-daemon(done for humidity)
+    "daemons" logging
+
+Fix publish/plot infrastructure
+
 - encoder:
     rotary-encoder kernel driver
         modify params (gpio_a, gpio_b)
-
-- partículas/cenizas
 
 - duster
 	client/server architecture
