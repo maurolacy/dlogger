@@ -335,7 +335,7 @@ start_read:
 return_result:	
 	switch(format){
 		case 0:
-			sprintf(msg, "Values: %d, %d, %d, %d, %d, %s\n", dht[0], dht[1], dht[2], dht[3], dht[4], result);
+			sprintf(msg, "%d.%d %d.%d %d %s\n", dht[0], dht[1], dht[2], dht[3], dht[4], result);
 			break;
 		case 1:
 			sprintf(msg, "%0X,%0X,%0X,%0X,%0X,%s\n", dht[0], dht[1], dht[2], dht[3], dht[4], result);
