@@ -1,6 +1,6 @@
-/* dht11km.c
+/* dht11.c
  *
- * dht11km - Device driver for reading values from DHT11 temperature and humidity sensor.
+ * dht11 - Device driver for reading values from DHT11 temperature and humidity sensor.
  *
  *			 By default the DHT11 is connected to GPIO pin 0 (pin 3 on the GPIO connector)
  *           The Major version default is 80 but can be set via the command line.
@@ -9,8 +9,8 @@
  *									  format=X - format of the output from the sensor
  *
  * Usage:
- *        Load driver: 	insmod ./dht11km.ko <optional variables>
- *				i.e.   	insmod ./dht11km.ko gpio_pin=2 format=3
+ *        Load driver: 	insmod ./dht11.ko <optional variables>
+ *				i.e.   	insmod ./dht11.ko gpio_pin=2 format=3
  *
  *		  Set up device file to read from (i.e.):
  *						mknod /dev/dht11 c 80 0

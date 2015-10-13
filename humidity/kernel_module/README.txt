@@ -16,8 +16,8 @@ format=X - format of the output from the sensor
 Usage:
 
 
-Load driver: insmod ./dht11km.ko 
-i.e. insmod ./dht11km.ko gpio_pin=2 format=3 
+Load driver: insmod ./dht11.ko 
+i.e. insmod ./dht11.ko gpio_pin=2 format=3 
 
 Set up device file to read from (i.e.): 
 mknod /dev/dht11 c 80 0 
