@@ -1,0 +1,4 @@
+- Rename to dht11
+- Fix module remove (busy)
+- Improve output format
+

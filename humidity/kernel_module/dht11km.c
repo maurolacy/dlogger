@@ -343,7 +343,7 @@ return_result:
 			sprintf(msg, "%02X%02X%02X%02X%02X%s\n", dht[0], dht[1], dht[2], dht[3], dht[4], result);
 			break;
 		case 3:
-			sprintf(msg, "Temperature: %dC\nHumidity: %d%%\nResult:%s\n", dht[0], dht[2], result);
+			sprintf(msg, "Temperature: %d.%d °C, Humidity: %d.%d%%, Result: %s\n", dht[2], dht[3], dht[0], dht[1], result);
 			break;
 		
 	}
