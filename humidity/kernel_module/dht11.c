@@ -2,21 +2,21 @@
  *
  * dht11 - Device driver for reading values from DHT11 temperature and humidity sensor.
  *
- *			 By default the DHT11 is connected to GPIO pin 0 (pin 3 on the GPIO connector)
- *           The Major version default is 80 but can be set via the command line.
- *			 Command line parameters: gpio_pin=X - a valid GPIO pin value
- *					                  driverno=X - value for Major driver number
- *									  format=X - format of the output from the sensor
+ *	By default the DHT11 is connected to GPIO pin 0 (pin 3 on the GPIO connector)
+ *      The Major version default is 80 but can be set via the command line.
+ *	Command line parameters: gpio_pin=X - a valid GPIO pin value
+ *		                 driverno=X - value for Major driver number
+ *				 format=X - format of the output from the sensor
  *
  * Usage:
- *        Load driver: 	insmod ./dht11.ko <optional variables>
- *				i.e.   	insmod ./dht11.ko gpio_pin=2 format=3
+ *      Load driver: insmod ./dht11.ko <optional variables>
+ *		i.e. insmod ./dht11.ko gpio_pin=4 format=3
  *
- *		  Set up device file to read from (i.e.):
- *						mknod /dev/dht11 c 80 0
- *						mknod /dev/myfile c <driverno> 0	- to set the output to your own file and driver number
+ *	Set up device file to read from (i.e.):
+ *		mknod /dev/dht11 c 80 0
+ *		mknod /dev/myfile c <driverno> 0	- to set the output to your own file and driver number
  *
- *		  To read the values from the sensor: cat /dev/dht11
+ *		To read the values from the sensor: cat /dev/dht11
  *
  * Copyright (C) 2012 Nigel Morton <nigel@ntpworld.co.uk>
  *  This program is free software; you can redistribute it and/or modify
@@ -317,7 +317,8 @@ start_read:
 	mdelay(10);
 	
 	//Check if the read results are valid. If not then try again!
-	if((dht[0] + dht[1] + dht[2] + dht[3] == dht[4]) & (dht[4] > 0))
+//	if((dht[0] + dht[1] + dht[2] + dht[3] == dht[4]) & (dht[4] > 0))
+	if (dht[4] && dht[4] == ((dht[0] + dht[1] + dht[2] + dht[3])&0xFF))
 		sprintf(result, "OK");
 	else
 		{
