@@ -1,0 +1,59 @@
+#!/bin/sh -e
+### BEGIN INIT INFO
+# Provides:          gethumidity
+# Required-Start:    $local_fs $syslog mysql
+# Required-Stop:     $local_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/stop humidity reader
+### END INIT INFO
+#
+# gethumidity		This init.d script is used to start humidity readings.
+
+#set -x
+
+ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
+CONF=/etc/dlogger.conf
+PROG=humidity/gethumidity1.sh
+NAME=`basename $PROG`
+
+#ARGS="-m table"
+ARGS="-m mysql"
+
+set -e
+. /lib/lsb/init-functions
+. $CONF
+export DB US PASS
+
+DAEMON=$BASE/$PROG
+if [ ! -x $DAEMON ]
+then
+	echo "No $NAME installed"
+	exit 0
+fi
+
+case $1 in
+	start)
+		log_daemon_msg "Starting humidity reader client" "$NAME"
+		start-stop-daemon --start --quiet --background --exec $DAEMON --
+		log_end_msg $?
+	;;
+	stop)
+		log_daemon_msg "Stopping humidity reader client" "$NAME"
+		start-stop-daemon --stop --quiet --oknodo -n $NAME
+		log_end_msg $?
+	;;
+	restart)
+		log_daemon_msg "Restarting humidity reader client" "$NAME"
+		start-stop-daemon --stop --quiet --oknodo -n $NAME
+		sleep 1
+		start-stop-daemon --start --quiet --background --exec $DAEMON --
+		log_end_msg $?
+	;;
+	*)
+		log_success_msg "Usage: /etc/init.d/gethumidity {start|stop|restart}"
+		exit 1
+	;;
+esac
+
+exit 0
