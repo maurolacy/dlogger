@@ -16,6 +16,7 @@
 
 DELETE FROM `temp`;
 DELETE FROM `pressure`;
+DELETE FROM `humidity`;
 DELETE FROM `rad`;
 DELETE FROM `X`;
 DELETE FROM `accel`;
