@@ -18,7 +18,7 @@ PROG=humidity/gethumidity1.sh
 NAME=`basename $PROG`
 
 #ARGS="-m table"
-ARGS="-m mysql"
+#ARGS="-m mysql"
 
 set -e
 . /lib/lsb/init-functions
