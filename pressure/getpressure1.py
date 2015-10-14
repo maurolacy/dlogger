@@ -19,7 +19,8 @@ cache = 1 # [seconds]
 oversampling_mode = bmp180.OS_MODE_8
 
 interval = 900  # [seconds]
-P_offset =  41. # [mb]
+#P_offset =  41. # [mb]
+P_offset =   0. # [mb]
 T_offset =   0. # [°C]
 
 def setup_db(db, user, password):
