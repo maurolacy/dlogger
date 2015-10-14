@@ -1,19 +1,22 @@
 #!/bin/sh -e
 ### BEGIN INIT INFO
 # Provides:          getpressure
-# Required-Start:    $local_fs $remote_fs $syslog mysql
-# Required-Stop:     $local_fs $remote_fs $syslog
+# Required-Start:    $local_fs $syslog mysql
+# Required-Stop:     $local_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Start/stop pressure reader
 ### END INIT INFO
 #
 # getpressure		This init.d script is used to start pressure readings.
+
 #set -x
 
 ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
 CONF=/etc/dlogger.conf
-DUST=pressure/getpressure1.py
+PROG=pressure/getpressure1.py
+NAME=`basename $PROG`
+PID_FILE=/var/run/${NAME}.pid
 
 #ARGS="-m table"
 ARGS="-m mysql"
@@ -23,28 +26,39 @@ set -e
 . $CONF
 export DB US PASS
 
-if [ ! -x $BASE/$DUST ]
+DAEMON=$BASE/$PROG
+if [ ! -x $DAEMON ]
 then
-	echo "No $DUST installed"
+	echo "No $NAME installed"
 	exit 0
 fi
 
 case $1 in
 	start)
-		log_daemon_msg "Starting pressure reader client" "$DUST"
-		echo
-		[ -f /screenlog.0 ] && cp /screenlog.0 $BASE/log/`date '+%Y-%m-%d_%H:%M'`.log
-		screen -L -d -m $BASE/$DUST $ARGS
+		log_daemon_msg "Starting pressure reader client" "$NAME"
+		start-stop-daemon --start --quiet --background \
+        --pidfile $PID_FILE --make-pidfile \
+		--exec $DAEMON -- $ARGS
+		log_end_msg $?
 	;;
 	stop)
-		log_daemon_msg "Stopping pressure reader client" "$DUST"
-		echo
-        D=`basename $DUST`
-#		killall $D 2>/dev/null
-        kill `ps -ef | grep SCREEN | grep $D | awk '{print $2}'` 2>/dev/null
+		log_daemon_msg "Stopping pressure reader client" "$NAME"
+        start-stop-daemon --stop --quiet --oknodo --pidfile $PID_FILE
+        log_end_msg $?
+        rm -f $PID_FILE
+	;;
+	restart)
+		log_daemon_msg "Restarting pressure reader client" "$NAME"
+        start-stop-daemon --stop --quiet --oknodo --pidfile $PID_FILE
+        rm -f $PID_FILE
+		sleep 1
+		start-stop-daemon --start --quiet --background \
+        --pidfile $PID_FILE --make-pidfile \
+		--exec $DAEMON -- $ARGS
+		log_end_msg $?
 	;;
 	*)
-		log_success_msg "Usage: /etc/init.d/getpressure {start|stop}"
+		log_success_msg "Usage: /etc/init.d/getpressure {start|stop|restart}"
 		exit 1
 	;;
 esac
