@@ -33,11 +33,15 @@ then
 	exit 0
 fi
 
+LOG=$BASE/log/`basename $NAME .py`.log
+#ARGS="$ARGS -l $LOG"
+
 case $1 in
 	start)
+		[ -f "$LOG" ] && mv -f $LOG $LOG.bak
 		log_daemon_msg "Starting pressure reader client" "$NAME"
 		start-stop-daemon --start --quiet --background \
-        --pidfile $PID_FILE --make-pidfile \
+		--pidfile $PID_FILE --make-pidfile \
 		--exec $DAEMON -- $ARGS
 		log_end_msg $?
 	;;
@@ -48,12 +52,13 @@ case $1 in
         rm -f $PID_FILE
 	;;
 	restart)
+		[ -f "$LOG" ] && mv -f $LOG $LOG.bak
 		log_daemon_msg "Restarting pressure reader client" "$NAME"
         start-stop-daemon --stop --quiet --oknodo --pidfile $PID_FILE
         rm -f $PID_FILE
 		sleep 1
 		start-stop-daemon --start --quiet --background \
-        --pidfile $PID_FILE --make-pidfile \
+		--pidfile $PID_FILE --make-pidfile \
 		--exec $DAEMON -- $ARGS
 		log_end_msg $?
 	;;
