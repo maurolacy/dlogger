@@ -2,7 +2,7 @@
 #set -x
 
 . /etc/dlogger.conf
-LOG=$BASE/logs/`basename $0 .sh`.log
+LOG=$BASE/log/`basename $0 .sh`.log
 
 DURATION=1	 # seconds (Sampling duration. Defined by the reader interface)
 INTERVAL=900 # seconds (Sampling interval. Defined by the reader interface)
@@ -30,7 +30,8 @@ do
     [ $H -gt 100 ] && R="BAD"
 #    [ $T -gt 60 ] && R="BAD"
 
-    echo "$H % $T °C: $R" | tee -a $LOG
+    D=`date '+%s'`
+    echo "$D $H $T $R" | tee -a $LOG
 
     mysql -u$US -p$PASS $DB <<EOF
 INSERT INTO \`humidity\` (\`humidity\`, \`temperature\`, \`result\`, \`duration\`, \`interval\`) VALUES ('$H', '$T', '$R', '$DURATION', '$INTERVAL');
