@@ -1,5 +1,5 @@
-Use start-stop-daemon(done for humidity)
-    "daemons" logging
+Use start-stop-daemon(done for humidity/pressure)
+    Fix logging (syslog?)
 
 Fix publish/plot infrastructure
 
