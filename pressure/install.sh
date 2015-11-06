@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get -y install python-smbus
+sudo apt-get -y install python-smbus python-mysqldb
 
 sudo sh -c 'echo "i2c_dev\ni2c_bcm2708" >>/etc/modules'
 
