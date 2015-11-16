@@ -81,7 +81,6 @@
 #define GPIO_INT_FALLING(g,v) *(gpio+22) = v ? (*(gpio+22) | (1<<g)) : (*(gpio+22) ^ (1<<g))
 
 // module parameters 
-static int sense = 0;
 static struct timeval lasttv = {0, 0};
 
 static spinlock_t lock;
@@ -98,7 +97,6 @@ static char msg[BUF_LEN];				// The msg the device will give when asked
 static char *msg_Ptr;
 static spinlock_t lock;
 static unsigned int bitcount=0;
-static unsigned int bytecount=0;
 static unsigned int started=0;			//Indicate if we have started a read or not
 static unsigned char dht[5];			// For result bytes
 static int format = 0;		//Default result format
@@ -122,7 +120,7 @@ static irqreturn_t irq_handler(int i, void *blah, struct pt_regs *regs)
 {
 	struct timeval tv;
 	long deltv;
-	int data = 0;
+	int delta = 0;
 	int signal;
 
 	// use the GPIO signal level 
@@ -131,43 +129,23 @@ static irqreturn_t irq_handler(int i, void *blah, struct pt_regs *regs)
 	/* reset interrupt */
 	GPIO_INT_CLEAR(gpio_pin);
 
-	if (sense != -1) {
-		// get current time 
-		do_gettimeofday(&tv);
+	// get current time
+	do_gettimeofday(&tv);
 
-		// get time since last interrupt in microseconds 
-		deltv = tv.tv_sec-lasttv.tv_sec;
+	// get time since last interrupt in microseconds
+	deltv = tv.tv_sec-lasttv.tv_sec;
 			
-		data = (int) (deltv*1000000 + (tv.tv_usec - lasttv.tv_usec));
-		lasttv = tv;	//Save last interrupt time
+	delta = (int) (deltv*1000000 + (tv.tv_usec - lasttv.tv_usec));
+	lasttv = tv;	//Save last interrupt time
 		
-		if((signal == 1)&(data > 40))
-			{
-			started = 1;
-			return IRQ_HANDLED;	
-			}
-			
-		if((signal == 0)&(started==1))
-			{
-			if(data > 80)
-				return IRQ_HANDLED;										//Start/spurious? signal
-			if(data < 15)
-				return IRQ_HANDLED;										//Spurious signal?
-			if (data > 60)//55 
-				dht[bytecount] = dht[bytecount] | (0x80 >> bitcount);	//Add a 1 to the data byte
-			
-			//Uncomment to log bits and durations - may affect performance and not be accurate!
-			//printk("B:%d, d:%d, dt:%d\n", bytecount, bitcount, data);
-			bitcount++;
-			if(bitcount == 8)
-				{
-				bitcount = 0;
-				bytecount++;
-				}
-			//if(bytecount == 5)
-			//	printk(KERN_INFO DHT11_DRIVER_NAME "Result: %d, %d, %d, %d, %d\n", dht[0], dht[1], dht[2], dht[3], dht[4]);
-			}
-		}
+	started++;
+	// Three first transitions ignored
+	if ((signal == 0) && started > 2) {
+	  dht[bitcount/8] <<= 1;
+	  if(delta > 49) // (28us+70us)/2 = 49 us
+		dht[bitcount/8] |= 1;
+	  bitcount++;
+	}
 	return IRQ_HANDLED;
 }
 
@@ -186,7 +164,7 @@ static int setup_interrupts(void)
 		printk(KERN_ERR DHT11_DRIVER_NAME ": Bad irq number or handler\n");
 		return -EINVAL;
 	default:
-		printk(KERN_INFO DHT11_DRIVER_NAME	": Interrupt %04x obtained\n", INTERRUPT_GPIO0);
+//		printk(KERN_INFO DHT11_DRIVER_NAME	": Interrupt %04x obtained\n", INTERRUPT_GPIO0);
 		break;
 	};
 
@@ -210,13 +188,13 @@ static int init_port(void)
 {
 	// reserve GPIO memory region. 
 	if (request_mem_region(GPIO_BASE, SZ_4K, DHT11_DRIVER_NAME) == NULL) {
-		printk(KERN_ERR DHT11_DRIVER_NAME ": unable to obtain GPIO I/O memory address\n");
+		printk(KERN_ERR DHT11_DRIVER_NAME ": Unable to obtain GPIO I/O memory address\n");
 		return -EBUSY;
 	}
 
 	// remap the GPIO memory 
 	if ((gpio = ioremap_nocache(GPIO_BASE, SZ_4K)) == NULL) {
-		printk(KERN_ERR DHT11_DRIVER_NAME ": failed to map GPIO I/O memory\n");
+		printk(KERN_ERR DHT11_DRIVER_NAME ": Failed to map GPIO I/O memory\n");
 		return -EBUSY;
 	}
 
@@ -237,7 +215,7 @@ static int __init dht11_init_module(void)
 
 	if (result != 1) {
 		result = -EINVAL;
-		printk(KERN_ERR DHT11_DRIVER_NAME ": invalid GPIO pin specified!\n");
+		printk(KERN_ERR DHT11_DRIVER_NAME ": Invalid GPIO pin specified!\n");
 		goto exit_rpi;
 	}
 	
@@ -248,7 +226,7 @@ static int __init dht11_init_module(void)
 	  return result;
 	}
 
-	printk(KERN_INFO DHT11_DRIVER_NAME ": driver registered!\n");
+	printk(KERN_INFO DHT11_DRIVER_NAME ": Driver registered\n");
 
 	result = init_port();
 	if (result < 0)
@@ -267,12 +245,12 @@ static void __exit dht11_exit_module(void)
 	if(gpio != NULL) {
 		iounmap(gpio);
 		release_mem_region(GPIO_BASE, SZ_4K);
-		printk(DHT11_DRIVER_NAME ": cleaned up resources\n");
+		printk(DHT11_DRIVER_NAME ": Cleaned up resources\n");
 	}
 
 	// Unregister the driver 
 	unregister_chrdev(driverno, DHT11_DRIVER_NAME);
-	printk(DHT11_DRIVER_NAME ": cleaned up module\n");
+	printk(DHT11_DRIVER_NAME ": Cleaned up module\n");
 }
 
 // Called when a process wants to read the dht11 "cat /dev/dht11"
@@ -294,7 +272,6 @@ static int read_dht11(struct inode *inode, struct file *file)
 start_read:
 	started = 0;
 	bitcount = 0;
-	bytecount = 0;
     dht[0] = 0;
 	dht[1] = 0;
 	dht[2] = 0;
@@ -302,7 +279,7 @@ start_read:
 	dht[4] = 0;
 	GPIO_DIR_OUTPUT(gpio_pin); 	// Set pin to output
     GPIO_CLEAR_PIN(gpio_pin);	// Set low
-    mdelay(20);					// DHT11 needs min 18mS to signal a startup
+    mdelay(18);					// DHT11 needs min 18mS to signal a startup
     GPIO_SET_PIN(gpio_pin);		// Take pin high
     udelay(40);					// Stay high for a bit before swapping to read mode
     GPIO_DIR_INPUT(gpio_pin); 	// Change to read
@@ -312,26 +289,28 @@ start_read:
 	
 	// Set up interrupts
 	setup_interrupts();
-	
+
 	//Give the dht11 time to reply
 	mdelay(10);
 	
 	//Check if the read results are valid. If not then try again!
-//	if((dht[0] + dht[1] + dht[2] + dht[3] == dht[4]) & (dht[4] > 0))
-	if (dht[4] && dht[4] == ((dht[0] + dht[1] + dht[2] + dht[3])&0xFF))
+	//Uncomment to log bits and durations - may affect performance and not be accurate!
+//	printk("bitcount: %d\n", bitcount);
+
+	if (bitcount >= 40 && dht[4] == ((dht[0] + dht[1] + dht[2] + dht[3]) & 0xFF))
 		sprintf(result, "OK");
 	else
 		{
 		retry++;
 		sprintf(result, "BAD");
 		if(retry == 5)
-			goto return_result;		//We tried 5 times so bail out
+			goto return_result;		// We tried 5 times so bail out
 		clear_interrupts();
-		mdelay(1100);				//Can only read from sensor every 1 second so give it time to recover
+		mdelay(1100);				// Can only read from sensor every 1 second so give it time to recover
 		goto start_read;
 		}
 
-		//Return the result in various different formats
+		// Return the result in various different formats
 return_result:	
 	switch(format){
 		case 0:
@@ -415,7 +394,7 @@ static ssize_t device_read(struct file *filp,	// see include/linux/fs.h
 module_init(dht11_init_module);
 module_exit(dht11_exit_module);
 
-MODULE_DESCRIPTION("DHT11 temperature/humidity sendor driver for Raspberry Pi GPIO.");
+MODULE_DESCRIPTION("DHT11 Raspberry Pi humidity/temperature sensor driver.");
 MODULE_AUTHOR("Nigel Morton");
 MODULE_LICENSE("GPL");
 

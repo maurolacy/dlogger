@@ -1,3 +1,1 @@
 - Fix module remove (busy)
-- Fix wrong OK checks/protocol
-    1/2 bits displacement(*2/*4 values)
