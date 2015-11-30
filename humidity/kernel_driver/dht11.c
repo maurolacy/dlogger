@@ -297,7 +297,7 @@ start_read:
 	//Uncomment to log bits and durations - may affect performance and not be accurate!
 //	printk("bitcount: %d\n", bitcount);
 
-	if (bitcount >= 40 && dht[4] == ((dht[0] + dht[1] + dht[2] + dht[3]) & 0xFF))
+	if (bitcount >= 40 && dht[4] == ((dht[0] + dht[1] + dht[2] + dht[3]) & 0xFF) && (dht[1] & dht[3]) == 0x00)
 		sprintf(result, "OK");
 	else
 		{
