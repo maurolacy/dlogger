@@ -24,7 +24,7 @@ ARGS="-m mysql"
 set -e
 . /lib/lsb/init-functions
 . $CONF
-export DB US PASS
+export BASE DB US PASS
 
 DAEMON=$BASE/$PROG
 if [ ! -x $DAEMON ]

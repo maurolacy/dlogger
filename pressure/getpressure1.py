@@ -23,6 +23,10 @@ interval = 900  # [seconds]
 P_offset =   0. # [mb]
 T_offset =   0. # [°C]
 
+def now():
+    from datetime import datetime
+    return datetime.now()
+
 def setup_db(db, user, password):
     import MySQLdb
     host = "localhost"
@@ -62,10 +66,18 @@ if __name__ == '__main__':
 #    print 'Oversampling mode is %d' % mode
 
     if mode == 'mysql':
-        DB = os.getenv("DB")
-        USER=os.getenv("US")
-        PASS=os.getenv("PASS")
-        db_cursor = setup_db(DB, USER, PASS)
+        LOG = os.getenv("BASE") + '/log/%s.log' % os.path.splitext(os.path.basename(sys.argv[0]))[0]
+        LOG = open(LOG, 'w')
+        print >>LOG, "%s: %s starting..." % (now(), sys.argv[0])
+        LOG.flush()
+        try:
+            DB = os.getenv("DB")
+            USER=os.getenv("US")
+            PASS=os.getenv("PASS")
+            db_cursor = setup_db(DB, USER, PASS)
+        except Exception as e:
+            print >>LOG, "%s: Exception: %s" % (now(), e)
+            sys.exit(1)
 
     level = oldLevel = True
 
@@ -78,7 +90,12 @@ if __name__ == '__main__':
         elif mode == 'mysql':
             print "%d %.2f %.1f" % (time.time(), P, T)
             assert(db_cursor)
-            db_cursor.execute('INSERT INTO `pressure` (`temp`, `pressure`, `duration`, `interval`) VALUES (%f, %f, %d, %d);' % (T, P, 0, interval))
+            try:
+                db_cursor.execute('INSERT INTO `pressure` (`temp`, `pressure`, `duration`, `interval`) VALUES (%f, %f, %d, %d);' % (T, P, 0, interval))
+            except Exception as e:
+                print >>LOG, "Exception:", e
+                LOG.flush()
+                pass
         elif mode == 'table':
             print "%d %.1f %.2f" % (time.time(), T, P)
         time.sleep(interval)
