@@ -1,0 +1,6 @@
+:
+
+export QUICK2WIRE_API_HOME=`pwd`/libs/quick2wire-python-api
+export PYTHONPATH=$PYTHONPATH:$QUICK2WIRE_API_HOME
+
+cd $QUICK2WIRE_API_HOME
