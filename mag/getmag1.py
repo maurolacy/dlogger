@@ -38,6 +38,7 @@ def usage():
 
 if __name__ == '__main__':
     mode='stdout' # default
+    LOG=sys.stderr
 
     if len(sys.argv) > 1:
         if sys.argv[1] in ('-h', '--help'):
@@ -50,16 +51,6 @@ if __name__ == '__main__':
                 usage()
         else:
             usage()
-
-#    gauss = 0.88 # Max sensitivity
-#    gauss = 1.3 # Sensor default
-    gauss = 2.5 # Calibration default
-#    gauss = 8.1 # Max scale
-    sensor = i2c_hmc5883l.i2c_hmc5883l(bus, gauss=gauss)
-    sensor.setContinuousMode()
-    sensor.setDeclination(7, 8) # Not needed
-#    sensor.setScale(gauss)
-    sensor.getAxes() # Force a reading
 
     if mode == 'mysql':
         LOG = os.getenv("BASE") + '/log/%s.log' % os.path.splitext(os.path.basename(sys.argv[0]))[0]
@@ -78,7 +69,17 @@ if __name__ == '__main__':
             LOG.flush()
             sys.exit(1)
 
-    level = oldLevel = True
+#    gauss = 0.88 # Max sensitivity
+#    gauss = 1.3 # Sensor default
+    gauss = 2.5 # Calibration default
+#    gauss = 8.1 # Max scale
+    sensor = i2c_hmc5883l.i2c_hmc5883l(bus, gauss=gauss)
+    sensor.setContinuousMode()
+    sensor.setDeclination(7, 8) # Not needed
+#    sensor.setScale(gauss)
+    sensor.getAxes() # Force a reading
+    
+    print("Scale: %.2f Gauss, default gain: %d, gain factors:", sensor.getGains()[gauss], sensor.getGainFactors(), file=LOG)
 
     while True:
         try:
@@ -101,5 +102,5 @@ if __name__ == '__main__':
                 LOG.flush()
                 pass
         elif mode == 'table':
-            print("%d %.4f %.4f %.4f" % (time.time(), X, Y, Z))
+            print("%d %.4f %.4f %.4f" % (time.time(), X, Y, Z), file=LOG)
         time.sleep(interval)
