@@ -1,0 +1,5 @@
+- Python3 mysql support
+- Reader periodic autocalibration
+- Write/use smbus model driver (BMP180)
+- Publish/fork in github 
+- Add/publish plots
