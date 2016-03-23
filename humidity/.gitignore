@@ -1,0 +1,7 @@
+kernel_driver/.tmp_versions/
+kernel_driver/Module.symvers
+kernel_driver/dht11.mod.c
+kernel_driver/modules.order
+kernel_driver/*.o
+kernel_driver/.*.cmd
+userspace_driver/DHT11
