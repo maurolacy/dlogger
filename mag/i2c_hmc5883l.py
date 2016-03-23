@@ -130,7 +130,7 @@ class i2c_hmc5883l:
 		self.CalibratedPositiveGainX = magno_x/self.CalibrationXY/calGain
 		self.CalibratedPositiveGainY = magno_y/self.CalibrationXY/calGain
 		self.CalibratedPositiveGainZ = magno_z/self.CalibrationZ/calGain
-		print("Positive calibrated gains: %.3f, %.3f, %.3f" % (self.CalibratedPositiveGainX, self.CalibratedPositiveGainY, self.CalibratedPositiveGainZ), file=stderr)	
+#		print("Positive calibrated gains: %.3f, %.3f, %.3f" % (self.CalibratedPositiveGainX, self.CalibratedPositiveGainY, self.CalibratedPositiveGainZ), file=stderr)	
 		
 		# Set negative bias
 		self.removeOption(self.ConfigurationRegisterA, self.MeasurementModePositiveBias)
@@ -147,7 +147,7 @@ class i2c_hmc5883l:
 		self.CalibratedNegativeGainX = -magno_x/self.CalibrationXY/calGain
 		self.CalibratedNegativeGainY = -magno_y/self.CalibrationXY/calGain
 		self.CalibratedNegativeGainZ = -magno_z/self.CalibrationZ/calGain
-		print("Negative calibrated gains: %.3f, %.3f, %.3f" % (self.CalibratedNegativeGainX, self.CalibratedNegativeGainY, self.CalibratedNegativeGainZ), file=stderr)	
+#		print("Negative calibrated gains: %.3f, %.3f, %.3f" % (self.CalibratedNegativeGainX, self.CalibratedNegativeGainY, self.CalibratedNegativeGainZ), file=stderr)	
 				
 		# Restore original values
 		self.scale = scale
