@@ -79,7 +79,7 @@ if __name__ == '__main__':
 #    sensor.setScale(gauss)
     sensor.getAxes() # Force a reading
     
-    print("Scale: %.2f Gauss, default gain: %d, gain factors:", sensor.getGains()[gauss], sensor.getGainFactors(), file=LOG)
+    print("Scale: %.2f Gauss. Default gain: %d. Gain factors(+, -):" % (gauss, sensor.getGains()[gauss]), sensor.getGainFactors(), file=LOG)
 
     while True:
         try:
