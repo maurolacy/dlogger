@@ -1,0 +1,69 @@
+#!/bin/sh -e
+### BEGIN INIT INFO
+# Provides:          getmag
+# Required-Start:    $local_fs $syslog mysql
+# Required-Stop:     $local_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/stop magnetic field reader
+### END INIT INFO
+#
+# getmag		This init.d script is used to start magnetic field readings.
+
+#set -x
+
+ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
+CONF=/etc/dlogger.conf
+PROG=mag/getmag1.py
+NAME=`basename $PROG`
+PID_FILE=/var/run/${NAME}.pid
+
+#ARGS="-m table"
+ARGS="-m mysql"
+
+set -e
+. /lib/lsb/init-functions
+. $CONF
+export BASE DB US PASS
+
+DAEMON=$BASE/$PROG
+if [ ! -x $DAEMON ]
+then
+	echo "No $NAME installed"
+	exit 0
+fi
+
+LOG=$BASE/log/`basename $NAME .py`.log
+#ARGS="$ARGS -l $LOG"
+
+case $1 in
+	start)
+		[ -f "$LOG" ] && mv -f $LOG $LOG.bak
+		log_daemon_msg "Starting magnetic field reader client" "$NAME"
+		start-stop-daemon --start --quiet --background \
+		--pidfile $PID_FILE --make-pidfile \
+		--exec $DAEMON -- $ARGS
+		log_end_msg $?
+	;;
+	stop)
+		log_daemon_msg "Stopping magnetic field reader client" "$NAME"
+        start-stop-daemon --stop --quiet --oknodo --pidfile $PID_FILE
+        log_end_msg $?
+        rm -f $PID_FILE
+	;;
+	restart)
+		[ -f "$LOG" ] && mv -f $LOG $LOG.bak
+		log_daemon_msg "Restarting magnetic field reader client" "$NAME"
+        start-stop-daemon --stop --quiet --oknodo --pidfile $PID_FILE
+        rm -f $PID_FILE
+		sleep 1
+		start-stop-daemon --start --quiet --background \
+		--pidfile $PID_FILE --make-pidfile \
+		--exec $DAEMON -- $ARGS
+		log_end_msg $?
+	;;
+	*)
+		log_success_msg "Usage: /etc/init.d/getmag {start|stop|restart}"
+		exit 1
+	;;
+esac
