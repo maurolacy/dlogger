@@ -21,14 +21,14 @@ def now():
     return datetime.now()
 
 def setup_db(db, user, password):
-    import MySQLdb
+    import mysql.connector
     host = "localhost"
     port = 3306
 
 #    print("DB:", db, "USER:", user, "PASS:", password, file=sys.stderr)
 
     # Connect to the Database
-    db=MySQLdb.connect(host=host, user=user, passwd=password, db=db, port=port)
+    db = mysql.connector.Connect(host=host, user=user, passwd=password, db=db, port=port)
 
     # Make the database cursor
     return db.cursor()
