@@ -13,6 +13,8 @@
 #set -x
 
 ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
+
+#cd $QUICK2WIRE_API_HOME
 CONF=/etc/dlogger.conf
 PROG=mag/getmag1.py
 NAME=`basename $PROG`
@@ -25,6 +27,9 @@ set -e
 . /lib/lsb/init-functions
 . $CONF
 export BASE DB US PASS
+. $BASE/mag/env.sh
+export QUICK2WIRE_API_HOME
+export PYTHONPATH
 
 DAEMON=$BASE/$PROG
 if [ ! -x $DAEMON ]
