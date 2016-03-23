@@ -76,24 +76,32 @@ if __name__ == '__main__':
             PASS=os.getenv("PASS")
             db_cursor = setup_db(DB, USER, PASS)
         except Exception as e:
-            print >>LOG, "%s: Exception: %s" % (now(), e)
+            print >>LOG, "%s: Db Exception: %s" % (now(), e)
+            LOG.flush()
             sys.exit(1)
 
     level = oldLevel = True
 
     while True:
-        (P, T) = sensor.pressure_and_temperature
+        try:
+            (P, T) = sensor.pressure_and_temperature
+        except Exception as e:
+            print >>LOG, "%s: Sensor Read Exception: %s" % (now(), e)
+            LOG.flush()
+            time.sleep(1)
+            continue
         P += P_offset
         T += T_offset
         if mode == 'stdout':
             print "Temperature: %.1f °C, Pressure: %.2f hPa" % (T, P)
         elif mode == 'mysql':
-            print "%d %.2f %.1f" % (time.time(), P, T)
+            print >>LOG, "%d %.2f %.1f" % (time.time(), P, T)
+            LOG.flush()
             assert(db_cursor)
             try:
                 db_cursor.execute('INSERT INTO `pressure` (`temp`, `pressure`, `duration`, `interval`) VALUES (%f, %f, %d, %d);' % (T, P, 0, interval))
             except Exception as e:
-                print >>LOG, "Exception:", e
+                print >>LOG, "%s: Db Exception: %s" % (now(), e)
                 LOG.flush()
                 pass
         elif mode == 'table':
