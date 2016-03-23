@@ -32,10 +32,10 @@ done
 
 gnuplot ${BASE}_$DATE.plot >$DATA/${BASE}_$MONTHYEAR.png
 
-#rm -f ${BASE}_$DATE.plot
-#for FIELD in $FIELDS
-#do
-#	rm -f ${FIELD}_$DATE.txt
-#done
+rm -f ${BASE}_$DATE.plot
+for FIELD in $FIELDS
+do
+	rm -f ${FIELD}_$DATE.txt
+done
 
 cd - >/dev/null
