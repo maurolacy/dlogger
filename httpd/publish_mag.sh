@@ -9,7 +9,7 @@ cat >/etc/cron.d/mag <<EOF
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
-*/15 *    * * *   root   test -x $BASE/httpd/pubpressure.sh && $BASE/httpd/pubpressure.sh >/dev/null
+*/15 *    * * *   root   test -x $BASE/httpd/pubmag.sh && $BASE/httpd/pubmag.sh >/dev/null
 EOF
 service cron restart
 echo "done."
