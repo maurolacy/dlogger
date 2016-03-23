@@ -19,7 +19,8 @@ cd $QUICK2WIRE_API_HOME
 git clone https://bitbucket.org/thinkbowl/i2clibraries.git #getting library files containing functions for i2c devices such as HMC5883L, ITG-3205, ADXL345 and LCD
 cd ..
 ln -s quick2wire-python-api/i2clibraries
-cp i2c_hcm8853l.py i2clibraries/
+rm -f i2clibraries/i2c_hmc5883l.py
+ln -s ../../i2c_hmc5883l.py i2clibraries/
 
 # Instalar apache2
 #cd ../httpd
