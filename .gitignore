@@ -1,3 +1,6 @@
 log/
 *.o
 *.pyc
+.project
+.pydevproject
+.settings/
