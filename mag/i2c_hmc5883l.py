@@ -162,9 +162,9 @@ class i2c_hmc5883l:
     
     def getGainFactors(self):
         """ Get calibration factors """
-        return ( (self.CalibratedPositiveGainX, CalibratedNegativeGainX),
-                (self.CalibratedPositiveGainY, CalibratedNegativeGainY),
-                (self.CalibratedPositiveGainZ, CalibratedNegativeGainZ) )
+        return ( (self.CalibratedPositiveGainX, self.CalibratedNegativeGainX),
+                (self.CalibratedPositiveGainY, self.CalibratedNegativeGainY),
+                (self.CalibratedPositiveGainZ, self.CalibratedNegativeGainZ) )
 
     def desaturate(self):
         n = 10
