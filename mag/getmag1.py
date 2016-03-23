@@ -10,7 +10,7 @@ import time
 import sys
 import os
 
-from i2clibraries import i2c_hmc5883l
+from i2c_hmc5883l import i2c_hmc5883l
 
 bus = 1
 
@@ -73,7 +73,7 @@ if __name__ == '__main__':
 #    gauss = 1.3 # Sensor default
     gauss = 2.5 # Calibration default
 #    gauss = 8.1 # Max scale
-    sensor = i2c_hmc5883l.i2c_hmc5883l(bus, gauss=gauss)
+    sensor = i2c_hmc5883l(bus, gauss=gauss)
     sensor.setContinuousMode()
     sensor.setDeclination(7, 8) # Not needed
 #    sensor.setScale(gauss)
