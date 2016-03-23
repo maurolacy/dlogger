@@ -20,18 +20,17 @@ def now():
     from datetime import datetime
     return datetime.now()
 
-def setup_db(db, user, password):
+def setup_db(database, user, password):
     import mysql.connector
     host = "localhost"
     port = 3306
 
-#    print("DB:", db, "USER:", user, "PASS:", password, file=sys.stderr)
+#    print("DB:", database, "USER:", user, "PASS:", password, file=sys.stderr)
 
     # Connect to the Database
-    db = mysql.connector.Connect(host=host, user=user, passwd=password, db=db, port=port)
+    db = mysql.connector.Connect(host=host, user=user, passwd=password, db=database, port=port)
 
-    # Make the database cursor
-    return db.cursor()
+    return db
 
 def usage():
     print("Usage: %s [-m mode]\n-m: output mode\n  stdout: standard output(default)\n  mysql : mysql db(data logger)\n  table : tabular(standard output)" % sys.argv[0], file=sys.stderr)
@@ -71,7 +70,9 @@ if __name__ == '__main__':
             DB = os.getenv("DB")
             USER=os.getenv("US")
             PASS=os.getenv("PASS")
-            db_cursor = setup_db(DB, USER, PASS)
+            db = setup_db(DB, USER, PASS)
+            # Make the database cursor
+            db_cursor = db.cursor()
         except Exception as e:
             print("%s: Db Exception: %s" % (now(), e), file=LOG)
             LOG.flush()
