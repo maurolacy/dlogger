@@ -6,8 +6,8 @@ set timefmt "%Y-%m-%d %H:%M:%S"
 #set format y "%t"
 set format x '%d/%m'
 set xlabel "Date"
-set ytics nomirror autofreq tc lt 1
-set ylabel "Magnetic field intensity [Gauss]" tc lt 1
+set ytics nomirror autofreq
+set ylabel "Magnetic field intensity [Gauss]"
 #set angles degrees
 set datafile separator "\t"
 set title "Secondary(W-E, U-D) Magnetic Field Components. %MONTH_YEAR%" offset 0,-1
