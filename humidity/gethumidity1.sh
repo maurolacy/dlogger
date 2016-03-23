@@ -24,10 +24,11 @@ while true
 do
     L=`cat $DEV`
 	H=`echo $L | cut -d\  -f1`
+	H2=`echo $H | cut -d\. -f1`
 	T=`echo $L | cut -d\  -f2`
 	R=`echo $L | cut -d\  -f4`
 #	[ "$R" = "BAD" ] && continue
-    [ $H -gt 100 ] && R="BAD"
+    [ $H2 -gt 100 ] && R="BAD"
 #    [ $T -gt 60 ] && R="BAD"
 
     D=`date '+%s'`
