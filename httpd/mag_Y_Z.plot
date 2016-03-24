@@ -14,4 +14,4 @@ set title "Secondary(W-E, U-D) Magnetic Field Components. %MONTH_YEAR%" offset 0
 #set term png transparent size 1280, 800
 set term png size 1024, 768
 set grid ytics lt 0 lw 1
-plot "%FIELD1%_%DATE%.txt" using 1:($2) with lines linetype 1 lc rgb "green" title "Y", "%FIELD2%_%DATE%.txt" using 1:($2) with lines linetype 1 lc rgb "blue" title "Z"
+plot "%BASE%_%FIELD1%_%DATE%.txt" using 1:($2) with lines linetype 1 lc rgb "green" title "Y", "%BASE%_%FIELD2%_%DATE%.txt" using 1:($2) with lines linetype 1 lc rgb "blue" title "Z"

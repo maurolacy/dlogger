@@ -14,4 +14,4 @@ set title "Main(N-S) Magnetic Field Component. %MONTH_YEAR%" offset 0,-1
 #set term png transparent size 1280, 800
 set term png size 1024, 768
 set grid ytics lt 0 lw 1
-plot "%BASE%_%FIELD1%_%DATE%.txt" using 1:($2) with lines linetype 1 lc rgb "red" title "X"
+plot "%BASE%_%FIELD1%_%DATE%.txt" using 1:($2) with lines linetype 1 lc rgb "red" title "X", "%BASE%_%FIELD2%_%DATE%.txt" using 1:($2) with lines linetype 1 lc rgb "violet" title "M"

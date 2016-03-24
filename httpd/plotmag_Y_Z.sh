@@ -18,12 +18,12 @@ FIELDS=`echo $BASE | sed "s/${TABLE}_//;s/_/ /g"`
 
 [ -n "$1" ] && FIELDS="$FIELDS $1"
 
-sed "s/%MONTH_YEAR%/$MONTH_YEAR/;s/%DATE%/$DATE/g" ${BASE}.plot >${BASE}_$DATE.plot
+sed "s/%BASE%/$BASE/g;s/%MONTH_YEAR%/$MONTH_YEAR/;s/%DATE%/$DATE/g" ${BASE}.plot >${BASE}_$DATE.plot
 
 F=1
 for FIELD in $FIELDS
 do
-	mysql -u$US -p$PASS $DB <<EOF >${FIELD}_$DATE.txt
+	mysql -u$US -p$PASS $DB <<EOF >${BASE}_${FIELD}_$DATE.txt
 SELECT \`ts\`, \`$FIELD\` FROM \`$TABLE\` WHERE \`ts\` > '$DATE1' AND \`ts\` < '$DATE2' ORDER BY \`ts\`;
 EOF
     sed -i "s/%FIELD$F%/$FIELD/" ${BASE}_$DATE.plot
@@ -35,7 +35,7 @@ gnuplot ${BASE}_$DATE.plot >$DATA/${BASE}_$MONTHYEAR.png
 rm -f ${BASE}_$DATE.plot
 for FIELD in $FIELDS
 do
-	rm -f ${FIELD}_$DATE.txt
+	rm -f ${BASE}_${FIELD}_$DATE.txt
 done
 
 cd - >/dev/null

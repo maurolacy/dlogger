@@ -24,7 +24,7 @@ F=1
 for FIELD in $FIELDS
 do
 	mysql -u$US -p$PASS $DB <<EOF >${BASE}_${FIELD}_$DATE.txt
-SELECT \`ts\`, \`$FIELD\` FROM \`$TABLE\` WHERE \`ts\` > '$DATE1' AND \`ts\` < '$DATE2' ORDER BY \`ts\`;
+SELECT \`ts\`, $FIELD FROM \`$TABLE\` WHERE \`ts\` > '$DATE1' AND \`ts\` < '$DATE2' ORDER BY \`ts\`;
 EOF
     sed -i "s/%FIELD$F%/$FIELD/" ${BASE}_$DATE.plot
     F=`expr $F + 1`
