@@ -246,6 +246,7 @@ class i2c_hmc5883l:
         """
             Return (calibrated or otherwise) values in Gauss
         """
+#        self.setSingleShotMode()
         (magno_x, magno_z, magno_y) = self.bus.read_3s16int(self.AxisXDataRegisterMSB)
 
         if (magno_x == -4096):

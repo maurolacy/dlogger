@@ -51,8 +51,9 @@ if __name__ == '__main__':
                 usage()
         else:
             usage()
-
-    if mode == 'mysql':
+    if mode == 'stdout':
+        interval = 1
+    elif mode == 'mysql':
         LOG = os.getenv("BASE") + '/log/%s.log' % os.path.splitext(os.path.basename(sys.argv[0]))[0]
         LOG = open(LOG, 'w')
         print("%s: %s starting..." % (now(), sys.argv[0]), file=LOG)
@@ -75,6 +76,7 @@ if __name__ == '__main__':
 #    gauss = 8.1 # Max scale
     sensor = i2c_hmc5883l(bus, gauss=gauss)
     sensor.setContinuousMode()
+#    sensor.setSingleShotMode()
     sensor.setDeclination(7, 8) # Not needed
 #    sensor.setScale(gauss)
     sensor.getAxes() # Force a reading
