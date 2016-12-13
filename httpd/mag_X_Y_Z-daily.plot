@@ -10,7 +10,7 @@ set ytics nomirror autofreq
 set ylabel "Magnetic field intensity [Gauss]"
 #set angles degrees
 set datafile separator "\t"
-set title "Magnetic Field. %MONTH_YEAR%" offset 0,-1
+set title "Magnetic Field. %DAY_MONTH_YEAR%" offset 0,-1
 #set term png transparent size 1280, 800
 set term png size 1440, 900
 set grid ytics lt 0 lw 1
