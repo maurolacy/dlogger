@@ -1,8 +1,14 @@
 #!/bin/bash
 
-sudo apt-get -y install python-smbus python-mysqldb
+sudo apt update
+sudo apt install git build-essential python-dev python-smbus
 
-sudo sh -c 'echo "i2c_dev\ni2c_bcm2708" >>/etc/modules'
+git clone https://github.com/adafruit/Adafruit_Python_BMP.git
+
+cd Adafruit_Python_BMP
+sudo python3 setup.py install
+
+cd ..
 
 WD=`pwd` 
 
