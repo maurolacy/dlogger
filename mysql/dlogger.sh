@@ -4,8 +4,8 @@
 
 echo -n "Installing mysql server..."
 echo
-#sudo apt-get update
-sudo apt-get -y install mysql-server python-mysqldb screen
+sudo apt update
+sudo apt -y install mariadb-server python-mysqldb screen
 echo "done."
 echo -n "Setting root password..."
 /usr/bin/mysql -uroot -Dmysql -e"update user set password=password('$PASS') where user='$US'"
