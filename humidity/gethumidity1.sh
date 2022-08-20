@@ -3,8 +3,9 @@
 
 . /etc/dlogger.conf
 LOG=$BASE/log/`basename $0 .sh`.log
+ERR=$BASE/log/`basename $0 .sh`.err
 
-DURATION=1	 # seconds (Sampling duration. Defined by the reader interface)
+DURATION=1 # seconds (Sampling duration. Defined by the reader interface)
 INTERVAL=900 # seconds (Sampling interval. Defined by the reader interface)
 
 #DRIVER="dht11"  # Kernel driver
@@ -12,14 +13,15 @@ INTERVAL=900 # seconds (Sampling interval. Defined by the reader interface)
 #FORMAT=0
 #DEV="/dev/$DRIVER"
 
-USER_DRIVER="./userspace_driver/DHT11" # Userspace driver
+USER_DRIVER="$BASE/humidity/userspace_driver/DHT11" # Userspace driver
 
 # Configure kernel module and device
 #insmod $BASE/humidity/kernel_driver/${DRIVER}.ko gpio_pin=$GPIO format=$FORMAT
 #mknod $DEV c 80 0 
-sleep 1
+#sleep 1
 
 [ -f "$LOG" ] && mv -f $LOG $LOG.bak
+[ -f "$ERR" ] && mv -f $ERR $ERR.bak
 
 
 R='OK'
@@ -44,4 +46,4 @@ do
 INSERT INTO \`humidity\` (\`humidity\`, \`temperature\`, \`result\`, \`duration\`, \`interval\`) VALUES ('$H2', '$T2', '$R', '$DURATION', '$INTERVAL');
 EOF
   sleep $INTERVAL
-done
+done 2>$ERR
