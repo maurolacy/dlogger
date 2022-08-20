@@ -9,7 +9,7 @@ MONTH_YEAR=${MONTH_YEAR^}
 MONTHYEAR=`echo $MONTH_YEAR | sed 's/ //'`
 
 DATE1=`date '+%Y-%m-01'`
-DATE2=`date --date="next month" '+%Y-%m'`
+DATE2=`date --date="next month" '+%Y-%m-%d'`
 
 cd `dirname $0`
 TABLE=`basename $0 .sh | sed 's/^plot//'`

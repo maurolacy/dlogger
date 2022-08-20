@@ -1,4 +1,5 @@
 #!/bin/bash
+#set -x
 
 . /etc/dlogger.conf
 
@@ -9,7 +10,7 @@ MONTH_YEAR=${MONTH_YEAR^}
 MONTHYEAR=`echo $MONTH_YEAR | sed 's/ //'`
 
 DATE1=`date '+%Y-%m-01'`
-DATE2=`date --date="next month" '+%Y-%m'`
+DATE2=`date --date="next month" '+%Y-%m-%d'`
 
 cd `dirname $0`
 BASE=`basename $0 .sh | sed 's/^plot//'`
@@ -23,7 +24,7 @@ sed "s/%MONTH_YEAR%/$MONTH_YEAR/;s/%DATE%/$DATE/g" ${BASE}.plot >${BASE}_$DATE.p
 F=1
 for FIELD in $FIELDS
 do
-	mysql -u$US -p$PASS $DB <<EOF >${FIELD}_$DATE.txt
+    mysql -u$US -p$PASS $DB <<EOF >${FIELD}_$DATE.txt
 SELECT \`ts\`, \`$FIELD\` FROM \`$TABLE\` WHERE \`result\` = "OK" and \`ts\` > '$DATE1' AND \`ts\` < '$DATE2' ORDER BY \`ts\`;
 EOF
     sed -i "s/%FIELD$F%/$FIELD/" ${BASE}_$DATE.plot
