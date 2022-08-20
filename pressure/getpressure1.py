@@ -95,7 +95,7 @@ if __name__ == '__main__':
         if mode == 'stdout':
             print "Temperature: %.1f °C, Pressure: %.2f hPa" % (T, P)
         elif mode == 'mysql':
-            print >>LOG, "%d %.2f %.1f" % (time.time(), P, T)
+            print >>LOG, "%s %.2f %.1f" % (now(), P, T)
             LOG.flush()
             assert(db_cursor)
             try:
@@ -105,5 +105,5 @@ if __name__ == '__main__':
                 LOG.flush()
                 pass
         elif mode == 'table':
-            print "%d %.1f %.2f" % (time.time(), T, P)
+            print "%s %.1f %.2f" % (now(), T, P)
         time.sleep(interval)

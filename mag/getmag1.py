@@ -94,7 +94,7 @@ if __name__ == '__main__':
         if mode == 'stdout':
             print("Magnetic Field: (%.4f, %.4f, %.4f) Gauss" % (X, Y, Z))
         elif mode == 'mysql':
-            print("%d %.4f, %.4f, %.4f" % (time.time(), X, Y, Z), file=LOG)
+            print("%s %.4f, %.4f, %.4f" % (now(), X, Y, Z), file=LOG)
             LOG.flush()
             assert(db_cursor)
             try:
@@ -104,5 +104,5 @@ if __name__ == '__main__':
                 LOG.flush()
                 pass
         elif mode == 'table':
-            print("%d %.4f %.4f %.4f" % (time.time(), X, Y, Z), file=LOG)
+            print("%s %.4f %.4f %.4f" % (now(), X, Y, Z), file=LOG)
         time.sleep(interval)

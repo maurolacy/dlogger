@@ -39,7 +39,7 @@ do
   [ $H2 -gt 100 ] && R="BAD"
 #[ $T -gt 60 ] && R="BAD"
 
-  D=`date '+%s'`
+  D=`date '+%Y-%m-%d %H:%M:%S'`
   echo "$D $H $T $R" | tee -a $LOG
 
   mysql -u$US -p$PASS $DB <<EOF
