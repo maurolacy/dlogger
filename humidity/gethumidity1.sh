@@ -6,7 +6,7 @@ LOG=$BASE/log/`basename $0 .sh`.log
 ERR=$BASE/log/`basename $0 .sh`.err
 
 DURATION=1 # seconds (Sampling duration. Defined by the reader interface)
-INTERVAL=900 # seconds (Sampling interval. Defined by the reader interface)
+INTERVAL=300 # seconds (Sampling interval. Defined by the reader interface)
 
 #DRIVER="dht11"  # Kernel driver
 #GPIO=4

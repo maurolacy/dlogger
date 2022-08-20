@@ -14,7 +14,7 @@ from i2c_hmc5883l import i2c_hmc5883l
 
 bus = 1
 
-interval = 900  # [seconds]
+interval = 300  # [seconds]
 
 def now():
     from datetime import datetime
