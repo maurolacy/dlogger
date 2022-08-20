@@ -3,7 +3,7 @@
 . /etc/dlogger.conf
 
 echo -n "Creating cron entry..."
-cat >/etc/cron.d/mag <<EOF
+cat >/etc/cron.d/mag-pub <<EOF
 # /etc/cron.d/part: crontab entries for magnetic field publication
 
 SHELL=/bin/sh

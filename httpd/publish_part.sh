@@ -3,7 +3,7 @@
 . /etc/dlogger.conf
 
 echo -n "Creating cron entry..."
-cat >/etc/cron.d/part <<EOF
+cat >/etc/cron.d/part-pub <<EOF
 # /etc/cron.d/part: crontab entries for particles publication
 
 SHELL=/bin/sh
