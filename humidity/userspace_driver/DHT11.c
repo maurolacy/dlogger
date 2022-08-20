@@ -100,7 +100,6 @@ int main(void)
      dht11_read_val(line);
      if (line[0] != '.') {
        printf(line);
-       fflush(stdout);
        break;
      }
   }
