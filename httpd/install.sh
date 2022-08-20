@@ -8,6 +8,7 @@ sudo apt update
 sudo apt -y install apache2 gnuplot
 echo "done."
 echo -n "Creating data dir '$DATA'..."
+sudo rm -f $DATA/index.html
 sudo mkdir -p $DATA
 sudo chown pi $DATA
 echo "done."
