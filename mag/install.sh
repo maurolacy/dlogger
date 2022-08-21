@@ -9,15 +9,15 @@ WD=`pwd`
 
 git clone https://github.com/quick2wire/quick2wire-python-api
 
-export QUICK2WIRE_API_HOME=`pwd`/quick2wire-python-api
-export PYTHONPATH=$PYTHONPATH:$QUICK2WIRE_API_HOME
+QUICK2WIRE_API_HOME=`pwd`/quick2wire-python-api
+#export PYTHONPATH=$PYTHONPATH:$QUICK2WIRE_API_HOME
 cd $QUICK2WIRE_API_HOME
 
 sudo python3 setup.py install
+cd ..
+rm -rf $QUICK2WIRE_API_HOME
 
 git clone https://bitbucket.org/thinkbowl/i2clibraries.git
-cd ..
-ln -s quick2wire-python-api/i2clibraries
 
 # Instalar apache2
 #cd ../httpd

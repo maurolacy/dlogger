@@ -14,24 +14,19 @@
 
 ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
 
-#cd $QUICK2WIRE_API_HOME
 CONF=/etc/dlogger.conf
 PROG=mag/getmag1.py
 PENV=mag/env.sh
 NAME=`basename $PROG`
 PID_FILE=/var/run/${NAME}.pid
 
-#ARGS="-m table"
 ARGS="-m mysql"
 
 set -e
 . /lib/lsb/init-functions
 . $CONF
+[ -z "$BASE" ] && BASE="`pwd`/.."
 export BASE DB US PASS
-# Set Python3 environment
-. $BASE/$PENV
-export QUICK2WIRE_API_HOME
-export PYTHONPATH
 
 DAEMON=$BASE/$PROG
 if [ ! -x $DAEMON ]
