@@ -82,15 +82,15 @@ echo "done."
 
 echo -n "Creating cron entry..."
 cat <<EOF | sudo tee /etc/cron.d/dygraph-pub
-# /etc/cron.d/part: crontab entries for dygraph data publication
+# /etc/cron.d/part: crontab entries for dygraphs data publication
 
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
-*/15 *    * * *   root   test -x $BASE/httpd/dygraph/pubpressure.sh && $BASE/httpd/dygraph/pubpressure.sh >/dev/null
-*/15 *    * * *   root   test -x $BASE/httpd/dygraph/pubhumidity.sh && $BASE/httpd/dygraph/pubhumidity.sh >/dev/null
-*/15 *    * * *   root   test -x $BASE/httpd/dygraph/pubtemperature.sh && $BASE/httpd/dygraph/pubtemperature.sh >/dev/null
-*/15 *    * * *   root   test -x $BASE/httpd/dygraph/pubtemp.sh && $BASE/httpd/dygraph/pubtemp.sh >/dev/null
+*/15 *    * * *   root   test -x $BASE/httpd/dygraphs/pubpressure.sh && $BASE/httpd/dygraphs/pubpressure.sh >/dev/null
+*/15 *    * * *   root   test -x $BASE/httpd/dygraphs/pubhumidity.sh && $BASE/httpd/dygraphs/pubhumidity.sh >/dev/null
+*/15 *    * * *   root   test -x $BASE/httpd/dygraphs/pubtemperature.sh && $BASE/httpd/dygraphs/pubtemperature.sh >/dev/null
+*/15 *    * * *   root   test -x $BASE/httpd/dygraphs/pubtemp.sh && $BASE/httpd/dygraphs/pubtemp.sh >/dev/null
 EOF
 sudo service cron restart
 echo "done."
