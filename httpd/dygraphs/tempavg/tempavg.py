@@ -49,7 +49,7 @@ def tempavg(temp_file_1, temp_file_2):
                 vs.append(v)
             else:
                 vs.append(ds[0][1])
-        mean.append(('%s' % datetime.fromtimestamp(ts), round(sum(vs)/len(vs), 2)))
+        mean.append(('%s' % datetime.fromtimestamp(ts), min(vs), sum(vs)/len(vs), max(vs)))
 
     # TODO: Generate the (min, mean, max) bands
 
@@ -64,4 +64,4 @@ if __name__ == '__main__':
     header = (header[0], 'mean_' + header[1])
     print('%s\t%s' % header)
     for m in mean:
-        print('%s\t%f' % m)
+        print('%s\t%.2f;%.2f;%.2f' % m)

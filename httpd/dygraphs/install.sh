@@ -54,6 +54,8 @@ cat <<EOF | sudo tee $DATA/index.html
     g1 = new Dygraph(document.getElementById("pressure"), "pressure.txt", {
       legend: 'always',
       title: 'Atmospheric Pressure',
+      showRoller: true,
+      rollPeriod: 7,
       ylabel: 'Pressure [hPa]',
       color: 'violet'
     });
@@ -61,6 +63,8 @@ cat <<EOF | sudo tee $DATA/index.html
     g2 = new Dygraph(document.getElementById("humidity"), "humidity.txt", {
       legend: 'always',
       title: 'Relative Humidity',
+      showRoller: true,
+      rollPeriod: 7,
       ylabel: 'Humidity [%RH]',
       color: 'blue'
     });
@@ -68,6 +72,8 @@ cat <<EOF | sudo tee $DATA/index.html
     g3 = new Dygraph(document.getElementById("temp"), "temp.txt", {
       legend: 'always',
       title: 'Temperature (from Pressure sensor)',
+      showRoller: true,
+      rollPeriod: 7,
       ylabel: 'Temperature [ºC]',
       color: 'red'
     });
@@ -75,6 +81,8 @@ cat <<EOF | sudo tee $DATA/index.html
     g4 = new Dygraph(document.getElementById("temperature"), "temperature.txt", {
       legend: 'always',
       title: 'Temperature (from Humidity sensor)',
+      showRoller: true,
+      rollPeriod: 7,
       ylabel: 'Temperature [ºC]',
       color: 'red'
     });
@@ -82,6 +90,9 @@ cat <<EOF | sudo tee $DATA/index.html
     g5 = new Dygraph(document.getElementById("mean_temperature"), "mean_temperature.txt", {
       legend: 'always',
       title: 'Mean Temperature (from both sensors)',
+      showRoller: true,
+      rollPeriod: 7,
+      customBars: true,
       ylabel: 'Temperature [ºC]',
       color: 'orange'
     });
