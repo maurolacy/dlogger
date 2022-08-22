@@ -4,6 +4,7 @@ import sys
 from datetime import datetime
 from bisect import bisect_right
 from itertools import zip_longest
+from math import isnan
 
 
 def tempavg(temp_file_1, temp_file_2):
@@ -34,20 +35,25 @@ def tempavg(temp_file_1, temp_file_2):
 
     # Generate the mean
     mean = []
-    for d1, d2 in zip_longest(data[0], data[1]):
-        if d1 is None:
-            d1 = d2
+    for ds in zip_longest(*data):
+        i = 1
+        while ds[0] is None:
+            ds[0] = ds[i]
+            i += 1
         # Follow the first dataset
-        ts = d1[0]
-        v1 = d1[1]
-        if d2 is not None:
-            v2 = lerp_array(data[1], ts)
-        else:
-            v2 = v1
-        mean.append(('%s' % datetime.fromtimestamp(ts), round((v1+v2)/2, 2)))
-    return mean, header
+        ts = ds[0][0]
+        vs = []
+        for i, d2 in enumerate(data, 1):
+            v = lerp_array(d2, ts)
+            if not isnan(v):
+                vs.append(v)
+            else:
+                vs.append(ds[0][1])
+        mean.append(('%s' % datetime.fromtimestamp(ts), round(sum(vs)/len(vs), 2)))
 
-    # Generate the (min, mean, max) bands
+    # TODO: Generate the (min, mean, max) bands
+
+    return mean, header
 
 
 if __name__ == '__main__':
