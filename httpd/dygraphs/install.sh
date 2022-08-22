@@ -112,7 +112,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 */5 *    * * *   root   test -x $BASE/httpd/dygraphs/pubhumidity.sh && $BASE/httpd/dygraphs/pubhumidity.sh >/dev/null
 */5 *    * * *   root   test -x $BASE/httpd/dygraphs/pubtemperature.sh && $BASE/httpd/dygraphs/pubtemperature.sh >/dev/null
 */5 *    * * *   root   test -x $BASE/httpd/dygraphs/pubtemp.sh && $BASE/httpd/dygraphs/pubtemp.sh >/dev/null
-*/5 *    * * *   root   test -x $BASE/httpd/dygraphs/tempavg/tempavg.sh && $BASE/httpd/dygraphs/tempavg/tempavg.sh $DATA/temp.txt $DATA/temperature.txt >$DATA/mean_temperature.txt
+*/5 *    * * *   root   test -x $BASE/httpd/dygraphs/tempavg/tempavg.py && $BASE/httpd/dygraphs/tempavg/tempavg.py $DATA/temp.txt $DATA/temperature.txt >$DATA/mean_temperature.txt
 EOF
 sudo service cron restart
 echo "done."
