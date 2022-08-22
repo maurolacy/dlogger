@@ -57,8 +57,8 @@ cat <<EOF | sudo tee $DATA/index.html
 
     g2 = new Dygraph(document.getElementById("humidity"), "humidity.txt", {
       legend: 'always',
-      title: 'Atmospheric Humidity',
-      ylabel: 'Humidity [%]',
+      title: 'Relative Humidity',
+      ylabel: 'Humidity [%RH]',
       color: 'blue'
     });
 
