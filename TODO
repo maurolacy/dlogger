@@ -1,12 +1,17 @@
 Use start-stop-daemon(done for humidity/pressure)
-    Fix logging (syslog?)
+  Fix logging (syslog?)
 
-Fix publish/plot infrastructure
+Plot infrastructure
+  - dygraphs (done)
+  - Add selections for: all data, yearly, monthly, weekly, daily
+
+- humidity
+  fix / use kernel driver (dht11)
 
 - encoder:
-    rotary-encoder kernel driver
-        modify params (gpio_a, gpio_b)
+  rotary-encoder kernel driver
+    modify params (gpio_a, gpio_b)
 
 - duster
-	client/server architecture
-	GUI client
+  client/server architecture
+  GUI client
