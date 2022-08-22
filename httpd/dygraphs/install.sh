@@ -46,6 +46,9 @@ cat <<EOF | sudo tee $DATA/index.html
     <div class="column" id="temp"></div>
     <div class="column" id="temperature"></div>
   </div>
+  <div class="row">
+    <div class="column" id="mean_temperature"></div>
+  </div>
 
   <script type="text/javascript">
     g1 = new Dygraph(document.getElementById("pressure"), "pressure.txt", {
@@ -75,6 +78,13 @@ cat <<EOF | sudo tee $DATA/index.html
       ylabel: 'Temperature [ºC]',
       color: 'red'
     });
+
+    g5 = new Dygraph(document.getElementById("mean_temperature"), "mean_temperature.txt", {
+      legend: 'always',
+      title: 'Mean Temperature (from both sensors)',
+      ylabel: 'Temperature [ºC]',
+      color: 'orange'
+    });
   </script>
 </body
 EOF
@@ -91,6 +101,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 */5 *    * * *   root   test -x $BASE/httpd/dygraphs/pubhumidity.sh && $BASE/httpd/dygraphs/pubhumidity.sh >/dev/null
 */5 *    * * *   root   test -x $BASE/httpd/dygraphs/pubtemperature.sh && $BASE/httpd/dygraphs/pubtemperature.sh >/dev/null
 */5 *    * * *   root   test -x $BASE/httpd/dygraphs/pubtemp.sh && $BASE/httpd/dygraphs/pubtemp.sh >/dev/null
+*/5 *    * * *   root   test -x $BASE/httpd/dygraphs/tempavg/tempavg.sh && $BASE/httpd/dygraphs/tempavg/tempavg.sh $DATA/temp.txt $DATA/temperature.txt >$DATA/mean_temperature.txt
 EOF
 sudo service cron restart
 echo "done."
