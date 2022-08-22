@@ -40,11 +40,11 @@ def tempavg(temp_file_1, temp_file_2):
         # Follow the first dataset
         ts = d1[0]
         v1 = d1[1]
-        if d2 is not None and d2[0] <= ts:
+        if d2 is not None:
             v2 = lerp_array(data[1], ts)
         else:
             v2 = v1
-        mean.append((ts, round((v1+v2)/2, 2)))
+        mean.append(('%s' % datetime.fromtimestamp(ts), round((v1+v2)/2, 2)))
     return mean, header
 
     # Generate the (min, mean, max) bands
@@ -56,6 +56,6 @@ if __name__ == '__main__':
         sys.exit(1)
     mean, header = tempavg(sys.argv[1], sys.argv[2])
     header = (header[0], 'mean_' + header[1])
-    mean.insert(0, header)
-    w = csv.writer(open('mean.csv', 'w'), delimiter='\t')
-    w.writerows(mean)
+    print('%s\t%s' % header)
+    for m in mean:
+        print('%s\t%f' % m)
