@@ -76,7 +76,7 @@ cat <<EOF | sudo tee $DATA/index.html
       showRoller: true,
       rollPeriod: 7,
       ylabel: 'Temperature [ºC]',
-      color: 'red'
+      color: 'green'
     });
 
     g4 = new Dygraph(document.getElementById("temperature"), "temperature.txt", {
@@ -85,7 +85,7 @@ cat <<EOF | sudo tee $DATA/index.html
       showRoller: true,
       rollPeriod: 7,
       ylabel: 'Temperature [ºC]',
-      color: 'red'
+      color: 'rgb(0,0,128)',
     });
 
     g5 = new Dygraph(document.getElementById("temp2"), "temp2.txt", {
