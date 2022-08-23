@@ -47,6 +47,7 @@ cat <<EOF | sudo tee $DATA/index.html
     <div class="column" id="temperature"></div>
   </div>
   <div class="row">
+    <div class="column" id="temp2"></div>
     <div class="column" id="mean_temperature"></div>
   </div>
 
@@ -87,7 +88,15 @@ cat <<EOF | sudo tee $DATA/index.html
       color: 'red'
     });
 
-    g5 = new Dygraph(document.getElementById("mean_temperature"), "mean_temperature.txt", {
+    g5 = new Dygraph(document.getElementById("temp2"), "temp2.txt", {
+      legend: 'always',
+      title: 'Temperature (from both sensors)',
+      showRoller: true,
+      rollPeriod: 7,
+      ylabel: 'Temperature [ºC]',
+    });
+
+    g6 = new Dygraph(document.getElementById("mean_temperature"), "mean_temperature.txt", {
       legend: 'always',
       title: 'Mean Temperature (from both sensors)',
       showRoller: true,
@@ -112,7 +121,8 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 */5 *    * * *   root   test -x $BASE/httpd/dygraphs/pubhumidity.sh && $BASE/httpd/dygraphs/pubhumidity.sh >/dev/null
 */5 *    * * *   root   test -x $BASE/httpd/dygraphs/pubtemperature.sh && $BASE/httpd/dygraphs/pubtemperature.sh >/dev/null
 */5 *    * * *   root   test -x $BASE/httpd/dygraphs/pubtemp.sh && $BASE/httpd/dygraphs/pubtemp.sh >/dev/null
-*/5 *    * * *   root   test -x $BASE/httpd/dygraphs/tempavg/tempavg.py && $BASE/httpd/dygraphs/tempavg/tempavg.py $DATA/temp.txt $DATA/temperature.txt >$DATA/mean_temperature.txt
+*/5 *    * * *   root   sleep 10 && test -x $BASE/httpd/dygraphs/pubtemp2.sh && $BASE/httpd/dygraphs/pubtemp2.sh >/dev/null
+*/5 *    * * *   root   sleep 10 && test -x $BASE/httpd/dygraphs/tempavg/tempavg.py && $BASE/httpd/dygraphs/tempavg/tempavg.py $DATA/temp.txt $DATA/temperature.txt >$DATA/mean_temperature.txt
 EOF
 sudo service cron restart
 echo "done."
