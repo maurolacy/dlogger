@@ -16,7 +16,7 @@ And a number of extra (outdated) drivers for:
 - Particle counter, for the `Shinyei Model PPD42NS Particle Sensor` (`./dust`).
 - Particle counter, interfacing through a serial port (`./part`).
 - Rotary encoder, using GPIO (`./encoder`).
-- GPS, from a serial port through gpsd.
+- GPS, from a serial port through `gpsd`.
 - Geiger counter (`Inspector nuclear radiation monitor`), interfacing through a serial port (`./rad`).
 - Temperature, from a digital clock with a temperature sensor (using ImageMagick and OCR) (`./extra`).
 
