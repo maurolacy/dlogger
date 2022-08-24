@@ -1,7 +1,7 @@
 # dlogger
-A quick and dirty data logger for the RaspberryPi.
+A quick and dirty modular data logger for the RaspberryPi.
 
-With a modular architecture.
+Data is gathered through init scripts, and stored into a MySQL database.
 
 Currently supports:
 
