@@ -6,11 +6,11 @@ Plot infrastructure
   - Add selections for: all data, yearly, monthly, weekly, daily
 
 -temperature
-  - average of both sensors (pressure and humidity)
-  - plot custom bars
+  - average of both sensors (pressure and humidity) (done)
+  - plot custom bars (done)
 
 - humidity
-  fix / use kernel driver (dht11)
+  fix / use kernel driver (dht11) (wip)
 
 - encoder:
   rotary-encoder kernel driver
