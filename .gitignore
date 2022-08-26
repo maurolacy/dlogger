@@ -2,6 +2,7 @@ log/
 .project
 .pydevproject
 .settings/
+.idea
 .DS_Store
 
 # Byte-compiled / optimized / DLL files

@@ -1,9 +1,12 @@
 # dlogger
+
 A quick and dirty modular data logger for the RaspberryPi.
+
+## Description
 
 Data is gathered through init scripts, and stored into a MySQL database.
 
-Currently supports:
+Currently supports the following sensors:
 
 - Pressure, using the `BMP180` sensor.
 - Humidity, using the `DHT11` sensor.
@@ -22,4 +25,13 @@ And a number of extra (outdated) drivers for:
 
 Data aggregation and plotting is done automatically through cron, after a configurable interval (5 minutes).
 
-Plotting is done through the dygraphs JavaScript library, or with ugly gnuplot graphs (old), and published in a local Apache webserver.
+Plotting is done through the [dygraphs](https://dygraphs.com) JavaScript library, and / or with ugly gnuplot plots (old),
+and published in a local Apache webserver.
+
+## Output example
+
+![Dlogger example](images/dlogger.png)
+
+## Installation
+
+Installation is done through a number of `install.sh` scripts in the different modules / sub-directories.
