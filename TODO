@@ -1,3 +1,7 @@
+Move sensors to sensors/
+Complete install instructions
+ - Test steps
+
 Use start-stop-daemon(done for humidity/pressure)
   Fix logging (syslog?)
 
