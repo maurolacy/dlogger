@@ -1,0 +1,25 @@
+Move sensors to sensors/
+Complete install instructions
+ - Test steps
+
+Use start-stop-daemon(done for humidity/pressure)
+  Fix logging (syslog?)
+
+Plot infrastructure
+  - dygraphs (done)
+  - Add selections for: all data, yearly, monthly, weekly, daily
+
+-temperature
+  - average of both sensors (pressure and humidity) (done)
+  - plot custom bars (done)
+
+- humidity
+  fix / use kernel driver (dht11) (wip)
+
+- encoder:
+  rotary-encoder kernel driver
+    modify params (gpio_a, gpio_b)
+
+- duster
+  client/server architecture
+  GUI client
