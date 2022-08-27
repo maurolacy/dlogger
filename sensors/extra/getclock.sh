@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /etc/counts.conf
+. /etc/dlogger.conf
 LOG=$BASE/logs/`basename $0 .sh`.log
 
 DURATION=60 # seconds

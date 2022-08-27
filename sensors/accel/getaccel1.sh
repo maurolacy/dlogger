@@ -10,7 +10,7 @@ INTERVAL=2	# seconds
 while true
 do
 	date | tee -a $LOG
-	L=`$BASE/accel/accel1.py 2>>$LOG`
+	L=`$SENSORS/accel/accel1.py 2>>$LOG`
 	echo $L | tee -a $LOG
 	X=`echo $L | cut -f1 -d\ `
 	Y=`echo $L | cut -f2 -d\ `

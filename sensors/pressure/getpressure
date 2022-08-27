@@ -26,7 +26,7 @@ set -e
 . $CONF
 export BASE DB US PASS
 
-DAEMON=$BASE/$PROG
+DAEMON=$SENSORS/$PROG
 if [ ! -x $DAEMON ]
 then
 	echo "No $NAME installed"

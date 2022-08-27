@@ -6,7 +6,7 @@ LOG=$BASE/logs/`basename $0 .sh`.log
 DURATION=1	# seconds
 INTERVAL=2	# seconds
 
-JSHON=$BASE/gps/jshon/jshon
+JSHON=$SENSORS/gps/jshon/jshon
 
 [ -f "$LOG" ] && mv -f $LOG $LOG.bak
 while true

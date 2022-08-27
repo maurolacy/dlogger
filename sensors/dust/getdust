@@ -23,7 +23,7 @@ set -e
 . $CONF
 export DB US PASS
 
-if [ ! -x $BASE/$DUST ]
+if [ ! -x $SENSORS/$DUST ]
 then
 	echo "No $DUST installed"
 	exit 0
@@ -34,7 +34,7 @@ case $1 in
 		log_daemon_msg "Starting dust counter client" "$DUST"
 		echo
 		[ -f /screenlog.0 ] && cp /screenlog.0 $BASE/log/`date '+%Y-%m-%d_%H:%M'`.log
-		screen -L -d -m $BASE/$DUST $ARGS
+		screen -L -d -m $SENSORS/$DUST $ARGS
 	;;
 	stop)
 		log_daemon_msg "Stopping dust counter client" "$DUST"

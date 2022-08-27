@@ -18,7 +18,7 @@ set -e
 . /lib/lsb/init-functions
 . $CONF
 
-if [ ! -x $BASE/$PART ]
+if [ ! -x $SENSORS/$PART ]
 then
 	echo "No $PART installed"
 	exit 0
@@ -29,7 +29,7 @@ case $1 in
 		log_daemon_msg "Starting serial particle counter client" "$PART"
 		echo
 		[ -f /screenlog.0 ] && cp /screenlog.0 $BASE/log/`date '+%Y-%m-%d_%H:%M'`.log
-		screen -L -d -m $BASE/$PART
+		screen -L -d -m $SENSORS/$PART
 	;;
 	stop)
 		log_daemon_msg "Stopping serial particle counter client" "$PART"

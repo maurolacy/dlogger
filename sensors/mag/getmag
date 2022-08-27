@@ -25,10 +25,9 @@ ARGS="-m mysql"
 set -e
 . /lib/lsb/init-functions
 . $CONF
-[ -z "$BASE" ] && BASE="`pwd`/.."
 export BASE DB US PASS
 
-DAEMON=$BASE/$PROG
+DAEMON=$SENSORS/$PROG
 if [ ! -x $DAEMON ]
 then
 	echo "No $NAME installed"

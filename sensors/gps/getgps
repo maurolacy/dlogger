@@ -19,7 +19,7 @@ set -e
 . /lib/lsb/init-functions
 . $CONF
 
-if [ ! -x $BASE/$GC ]
+if [ ! -x $SENSORS/$GC ]
 then
 	echo "No $GC installed"
 	exit 0
@@ -31,7 +31,7 @@ case $1 in
 		echo
 		mkdir -p $BASE/log
 		[ -f /screenlog.0 ] && cp /screenlog.0 $BASE/log/`date '+%Y-%m-%d_%H:%M'`.log
-		screen -L -d -m $BASE/$GC
+		screen -L -d -m $SENSORS/$GC
 	;;
 	stop)
 		log_daemon_msg "Stopping gps reader" "$GC"

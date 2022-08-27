@@ -12,7 +12,7 @@ do
 	date
 
 	#get value
-	TEMP=`$BASE/temp/temp`
+	TEMP=`$SENSORS/temp/temp`
 	[ -z "$TEMP" -o "$TEMP" = "nan" ] && TEMP=-273.15
 	echo $TEMP
 

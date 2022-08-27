@@ -13,10 +13,10 @@ INTERVAL=300 # seconds (Sampling interval. Defined by the reader interface)
 #FORMAT=0
 #DEV="/dev/$DRIVER"
 
-USER_DRIVER="$BASE/humidity/userspace_driver/DHT11" # Userspace driver
+USER_DRIVER="$SENSORS/humidity/userspace_driver/DHT11" # Userspace driver
 
 # Configure kernel module and device
-#insmod $BASE/humidity/kernel_driver/${DRIVER}.ko gpio_pin=$GPIO format=$FORMAT
+#insmod $SENSORS/humidity/kernel_driver/${DRIVER}.ko gpio_pin=$GPIO format=$FORMAT
 #mknod $DEV c 80 0 
 #sleep 1
 

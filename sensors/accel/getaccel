@@ -1,24 +1,25 @@
 #!/bin/sh -e
 ### BEGIN INIT INFO
-# Provides:          getrad
+# Provides:          getaccel
 # Required-Start:    $local_fs $remote_fs $network $syslog
 # Required-Stop:     $local_fs $remote_fs $network $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Start/stop (serial) geiger counter readings
+# Short-Description: Obtain accelerometer readings
 ### END INIT INFO
 #
-# getrad		This init.d script is used to start serial geiger counter readings.
+# getaccel		This init.d script is used to read the ADXL345 accelerometer axes
+#			It just calls ~pi/work/dlogger/getaccel1.sh
 
 ENV="env -i LANG=C PATH=/usr/local/bin:/usr/bin:/bin"
 CONF=/etc/dlogger.conf
-GC=rad/getrad1.sh
+GC=accel/getaccel1.sh
 
 set -e
 . /lib/lsb/init-functions
 . $CONF
 
-if [ ! -x $BASE/$GC ]
+if [ ! -x $SENSORS/$GC ]
 then
 	echo "No $GC installed"
 	exit 0
@@ -26,18 +27,19 @@ fi
 
 case $1 in
 	start)
-		log_daemon_msg "Starting serial geiger client" "$GC"
+		log_daemon_msg "Starting accelerometer reader" "$GC"
 		echo
+		mkdir -p $BASE/log
 		[ -f /screenlog.0 ] && cp /screenlog.0 $BASE/log/`date '+%Y-%m-%d_%H:%M'`.log
-		screen -L -d -m $BASE/$GC
+		screen -d -m $SENSORS/$GC
 	;;
 	stop)
-		log_daemon_msg "Stopping serial geiger client" "$GC"
+		log_daemon_msg "Stopping accelerometer reader" "$GC"
 		echo
-		killall $GC 2>/dev/null
+		killall `basename $GC` 2>/dev/null
 	;;
 	*)
-		log_success_msg "Usage: /etc/init.d/getrad {start|stop}"
+		log_success_msg "Usage: /etc/init.d/getaccel {start|stop}"
 		exit 1
 	;;
 esac
