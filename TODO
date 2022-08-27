@@ -1,6 +1,9 @@
-Move sensors to sensors/
+Move sensors to sensors/ (done)
+
 Complete install instructions
+ - Set database password during install
  - Test steps
+ - Create missing install scripts (sensors)
 
 Use start-stop-daemon(done for humidity/pressure)
   Fix logging (syslog?)
