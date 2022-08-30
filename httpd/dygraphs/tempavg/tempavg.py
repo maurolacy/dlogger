@@ -1,18 +1,40 @@
 #!/usr/bin/env python3
-import csv
-import sys
-from datetime import datetime
+
+from argparse import FileType, ArgumentParser
 from bisect import bisect_right
+import csv
+from datetime import datetime
 from itertools import zip_longest
 from math import isnan
+from sys import stderr
 
 
-def tempavg(temp_file_1, temp_file_2):
+def init_args():
+    p = ArgumentParser()
+
+    p.add_argument('--append', '-a', action='store_true')
+    p.add_argument('input_file_1', type=FileType('r'), help='Input file 1')
+    p.add_argument('input_file_2', type=FileType('r'), help='Input file 2')
+    p.add_argument('-o', '--output-file', dest='output_file', default='/dev/stdout', help='Output file. Default: /dev/stdout')
+
+    return p.parse_known_args()[0]
+
+
+def tempavg(temp_file_1, temp_file_2, output_file, append=False):
+    last_date = None
+    if append:
+        r = csv.reader(open(output_file), delimiter='\t')
+        for data in r:
+            last_date = data[0]
+    print('Last date:', last_date, file=stderr)
     data = ([], [])
     for i, f in enumerate([temp_file_1, temp_file_2]):
-        r = csv.reader(open(f), delimiter='\t')
+        r = csv.reader(f, delimiter='\t')
         header = next(r)
         for date, value in r:
+            if last_date and date <= last_date:
+                continue
+            print(date, value, file=stderr)
             # Convert to timestamps
             ts = datetime.strptime(date, "%Y-%m-%d %H:%M:%S").timestamp()
             v = float(value)
@@ -57,11 +79,11 @@ def tempavg(temp_file_1, temp_file_2):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print("Usage: %s <file1> <file2>" % sys.argv[0], file=sys.stderr)
-        sys.exit(1)
-    mean, header = tempavg(sys.argv[1], sys.argv[2])
-    header = (header[0], 'mean_' + header[1])
-    print('%s\t%s' % header)
-    for m in mean:
-        print('%s\t%.2f;%.2f;%.2f' % m)
+    args = init_args()
+    mean, header = tempavg(args.input_file_1, args.input_file_2, args.output_file, args.append)
+    with open(args.output_file, 'a') if args.append else open(args.output_file, 'x') as output_file:
+        if not args.append:
+            header = (header[0], 'mean_' + header[1])
+            print('%s\t%s' % header, file=output_file)
+        for m in mean:
+            print('%s\t%.2f;%.2f;%.2f' % m, file=output_file)
