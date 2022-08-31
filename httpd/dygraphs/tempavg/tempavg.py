@@ -23,9 +23,10 @@ def init_args():
 def tempavg(temp_file_1, temp_file_2, output_file, append=False):
     last_date = None
     if append:
-        r = csv.reader(open(output_file), delimiter='\t')
-        for data in r:
-            last_date = data[0]
+        with open(output_file, 'r', errors='ignore') as f:
+            r = csv.reader(f, delimiter='\t')
+            for data in r:
+                last_date = data[0]
     print('Last date:', last_date, file=stderr)
     data = ([], [])
     for i, f in enumerate([temp_file_1, temp_file_2]):
@@ -71,10 +72,8 @@ def tempavg(temp_file_1, temp_file_2, output_file, append=False):
                 vs.append(v)
             else:
                 vs.append(ds[0][1])
+        # Generate the (min, mean, max) bands
         mean.append(('%s' % datetime.fromtimestamp(ts), min(vs), sum(vs)/len(vs), max(vs)))
-
-    # TODO: Generate the (min, mean, max) bands
-
     return mean, header
 
 
