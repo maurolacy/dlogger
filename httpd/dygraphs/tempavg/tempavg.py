@@ -80,7 +80,8 @@ def tempavg(temp_file_1, temp_file_2, output_file, append=False):
 if __name__ == '__main__':
     args = init_args()
     mean, header = tempavg(args.input_file_1, args.input_file_2, args.output_file, args.append)
-    with open(args.output_file, 'a') if args.append else open(args.output_file, 'x') as output_file:
+    mode = 'a' if args.append else 'w' if args.output_file == '/dev/stdout' else 'x'
+    with open(args.output_file, mode) as output_file:
         if not args.append:
             header = (header[0], 'mean_' + header[1])
             print('%s\t%s' % header, file=output_file)
