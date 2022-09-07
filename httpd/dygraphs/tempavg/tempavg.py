@@ -48,8 +48,10 @@ def tempavg(temp_file_1, temp_file_2, output_file, append=False):
 
     def lerp_array(data, ts):
         i = bisect_right(list(map(lambda e: e[0], data)), ts)
-        if i in (0, len(data)):
-            return float('nan')
+        if i == 0:
+            return data[0][1]
+        elif i == len(data):
+            return data[i-1][1]
         t = (ts - data[i-1][0])/(data[i][0] - data[i-1][0])
 
         interp = lerp(data[i-1][1], data[i][1], t)
@@ -68,10 +70,7 @@ def tempavg(temp_file_1, temp_file_2, output_file, append=False):
         vs = []
         for i, d2 in enumerate(data, 1):
             v = lerp_array(d2, ts)
-            if not isnan(v):
-                vs.append(v)
-            else:
-                vs.append(ds[0][1])
+            vs.append(v)
         # Generate the (min, mean, max) bands
         mean.append(('%s' % datetime.fromtimestamp(ts), min(vs), sum(vs)/len(vs), max(vs)))
     return mean, header
