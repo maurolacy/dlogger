@@ -61,6 +61,7 @@ def tempavg(temp_file_1, temp_file_2, output_file, append=False):
     # Generate the mean
     mean = []
     for ds in zip_longest(*data):
+        ds = list(ds)
         i = 1
         while ds[0] is None:
             ds[0] = ds[i]
