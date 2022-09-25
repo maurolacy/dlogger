@@ -19,7 +19,7 @@ cat <<EOF | sudo tee $DATA/index.html
     var gIsZoomed = "";
     var g1, g2, g3, g4, g5, g6;
     var desired_range = null;
-    var orig_range = [ 1660860000000, 1664064000000 ];
+    var orig_range = [ 1660903200000, 1664064000000 ];
 
     function updateZoom(zoomlevel) {
       if (parseInt(zoomlevel) >= 0 && parseInt(zoomlevel) <= 1095) {
@@ -144,7 +144,10 @@ cat <<EOF | sudo tee $DATA/index.html
     <div class="column" id="temp2"></div>
     <div class="column" id="mean_temperature"></div>
   </div>
+  <div class="row">
   <td style="text-align:right">
+    <div class="column" id="btn-left"></div>
+    <div class="column" id="btn-right", align="right">
     <div class="btn-group-my">
       <div style="display:inline-block" class="muted">Zoom: </div>
       <div class="btn-group" data-toggle="buttons-checkbox">
@@ -158,7 +161,9 @@ cat <<EOF | sudo tee $DATA/index.html
         <button type="button" id="zoom0" onclick="updateZoom(0);" class="btn btn-mini zoom">all time</button>
       </div>
     </div>
+    </div>
   </td>
+  </div>
 
   <script type="text/javascript">
     g1 = new Dygraph(document.getElementById("pressure"), "pressure.txt", {
