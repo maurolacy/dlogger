@@ -21,24 +21,7 @@ cat <<EOF | sudo tee $DATA/index.html
     var desired_range = null;
     var orig_range = [ 1279324800000, 1664064000000 ];
 
-//    function update_hash(hash) {
-//      if (hash.length <= 1) {
-//        hash = location.pathname;
-//        if (window.location.hash <=1 ){
-//          return;
-//        }
-//      }
-//
-//      if (history.pushState) {
-//        if(window.location.hash != hash) {
-//          history.pushState(null, null, hash);
-//        }
-//      }
-//    }
-
     function updateZoom(zoomlevel) {
-      var update = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
       if (parseInt(zoomlevel) >= 0 && parseInt(zoomlevel) <= 1095) {
         zoom(parseInt(zoomlevel));
 
@@ -63,10 +46,6 @@ cat <<EOF | sudo tee $DATA/index.html
         zoom(0);
         gIsZoomed="alltime";
       }
-      // TODO: update_hash, get_gHash
-//      if (update) {
-//        update_hash("#"+get_gHash());
-//      }
     }
 
     function approach_range() {
@@ -89,8 +68,6 @@ cat <<EOF | sudo tee $DATA/index.html
 
     function zoom(days) {
       var w = g6.xAxisExtremes();
-      $(".zoom").removeClass('btn-inverse').removeClass('active');
-      $("#zoom"+days).addClass('btn-inverse');
       res = days * 86400;
       if (days != 0) {
         desired_range = [ w[1] - res * 1000, w[1] ];
@@ -123,7 +100,6 @@ cat <<EOF | sudo tee $DATA/index.html
 }
 </style>
 <style>
-</style>
   .btn-group {position:relative;display:inline-block;font-size:0;white-space:nowrap;vertical-align:middle}
   .btn-group-my {margin:2px}
   .btn {display:inline-block;padding:4px 12px;margin-bottom:0;font-size:14px;line-height:20px;color:#333;text-align:center;text-shadow:rgba(255,255,255,0.74902) 0 1px 1px;vertical-align:middle;cursor:pointer;border-width:1px;border-style:solid;border-color:rgba(0,0,0,0.0980392) rgba(0,0,0,0.0980392) #b3b3b3;border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-right-radius:4px;border-bottom-left-radius:4px;-webkit-box-shadow:rgba(255,255,255,0.2) 0 1px 0 inset,rgba(0,0,0,0.0470588) 0 1px 2px;box-shadow:rgba(255,255,255,0.2) 0 1px 0 inset,rgba(0,0,0,0.0470588) 0 1px 2px;background-image:linear-gradient(#fff,#e6e6e6);background-color:#f5f5f5;background-repeat:repeat-x}
@@ -141,10 +117,9 @@ cat <<EOF | sudo tee $DATA/index.html
   .btn:focus {outline:-webkit-focus-ring-color auto 5px;outline-offset:-2px}
   .btn.active, .btn:active {outline:0;-webkit-box-shadow:rgba(0,0,0,0.14902) 0 2px 4px inset,rgba(0,0,0,0.0470588) 0 1px 2px;box-shadow:rgba(0,0,0,0.14902) 0 2px 4px inset,rgba(0,0,0,0.0470588) 0 1px 2px;background-image:none}
   .btn-primary.active, .btn-warning.active, .btn-danger.active, .btn-success.active, .btn-info.active, .btn-inverse.activel {color:rgba(255,255,255,0.74902)}
-  .btn-inverse {color:#fff;text-shadow:rgba(0,0,0,0.247059) 0 -1px 0;border-color:rgba(0,0,0,0.0980392) rgba(0,0,0,0.0980392) rgba(0,0,0,0.247059);background-image:linear-gradient(#333,#111);background-color:#363636;background-repeat:repeat-x}
-  .dark .btn-inverse:hover, .dark .btn-inverse:focus, .dark .btn-inverse:active, .dark .btn-inverse.active, .dark .btn-inverse.disabled,.dark .btn-inverse[disabled] {color:#fff;background-color:#222}
   .btn-group>.btn:hover, .btn-group>.btn:focus, .btn-group>.btn:active, .btn-group>.btn.active {z-index:2}
   .muted{color:#999}
+</style>
 </head>
 <body>
   <div class="row">
@@ -169,7 +144,7 @@ cat <<EOF | sudo tee $DATA/index.html
         <button type="button" id="zoom90" onclick="updateZoom(90);" class="btn btn-mini zoom">3 months</button>
         <button type="button" id="zoom180" onclick="updateZoom(180);" class="btn btn-mini zoom">6 months</button>
         <button type="button" id="zoom365" onclick="updateZoom(365);" class="btn btn-mini zoom">1 year</button>
-        <button type="button" id="zoom1095" onclick="updateZoom(1095);" class="btn btn-mini zoom btn-inverse">3 years</button>
+        <button type="button" id="zoom1095" onclick="updateZoom(1095);" class="btn btn-mini zoom">3 years</button>
         <button type="button" id="zoom0" onclick="updateZoom(0);" class="btn btn-mini zoom">all time</button>
       </div>
     </div>
