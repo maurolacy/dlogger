@@ -19,7 +19,7 @@ cat <<EOF | sudo tee $DATA/index.html
     var gIsZoomed = "";
     var g6;
     var desired_range = null;
-    var orig_range = [ 1279324800000, 1664064000000 ];
+    var orig_range = [ 1660860000000, 1664064000000 ];
 
     function updateZoom(zoomlevel) {
       if (parseInt(zoomlevel) >= 0 && parseInt(zoomlevel) <= 1095) {
