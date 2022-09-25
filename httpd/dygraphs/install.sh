@@ -17,7 +17,7 @@ cat <<EOF | sudo tee $DATA/index.html
   <script>
     var gIsLog = 0;
     var gIsZoomed = "";
-    var g6;
+    var g1, g2, g3, g4, g5, g6;
     var desired_range = null;
     var orig_range = [ 1660860000000, 1664064000000 ];
 
@@ -53,10 +53,20 @@ cat <<EOF | sudo tee $DATA/index.html
 
       var range = g6.xAxisRange();
       if (Math.abs(desired_range[0] - range[0]) < 60 && Math.abs(desired_range[1] - range[1]) < 60) {
+        g1.updateOptions({dateWindow: desired_range});
+        g2.updateOptions({dateWindow: desired_range});
+        g3.updateOptions({dateWindow: desired_range});
+        g4.updateOptions({dateWindow: desired_range});
+        g5.updateOptions({dateWindow: desired_range});
         g6.updateOptions({dateWindow: desired_range});
       } else {
         var new_range;
         new_range = [0.5 * (desired_range[0] + range[0]), 0.5 * (desired_range[1] + range[1])];
+        g1.updateOptions({dateWindow: desired_range});
+        g2.updateOptions({dateWindow: desired_range});
+        g3.updateOptions({dateWindow: desired_range});
+        g4.updateOptions({dateWindow: desired_range});
+        g5.updateOptions({dateWindow: desired_range});
         g6.updateOptions({dateWindow: new_range});
         animate();
       }
