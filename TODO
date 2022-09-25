@@ -8,7 +8,7 @@ Use start-stop-daemon(done for humidity/pressure)
 
 Plot infrastructure
   - dygraphs (done)
-  - Add selections for: all data, yearly, monthly, weekly, daily
+  - Add selections for: all data, yearly, monthly, weekly, daily (done)
 
 - humidity
   Fix / use kernel driver (dht11) (wip)
