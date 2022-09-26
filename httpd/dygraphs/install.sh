@@ -15,36 +15,15 @@ cat <<EOF | sudo tee $DATA/index.html
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <script src="//cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.js"></script>
   <script>
-    var gIsLog = 0;
-    var gIsZoomed = "";
     var g1, g2, g3, g4, g5, g6;
     var desired_range = null;
     var orig_range = [ 1660903200000, 1664064000000 ];
 
     function updateZoom(zoomlevel) {
-      if (parseInt(zoomlevel) >= 0 && parseInt(zoomlevel) <= 1095) {
+      if (parseInt(zoomlevel) >= 0 && parseInt(zoomlevel) <= 1095*24) {
         zoom(parseInt(zoomlevel));
-
-        if (zoomlevel==1) {
-          gIsZoomed="1d";
-        } else if (zoomlevel==7) {
-          gIsZoomed="1w";
-        } else if (zoomlevel==30) {
-          gIsZoomed="1m";
-        } else if (zoomlevel==90) {
-          gIsZoomed="3m";
-        } else if (zoomlevel==180) {
-          gIsZoomed="6m";
-        } else if (zoomlevel==365) {
-          gIsZoomed="1y";
-        } else if (zoomlevel==1095) {
-          gIsZoomed="3y";
-        } else {
-          gIsZoomed="alltime";
-        }
       } else {
         zoom(0);
-        gIsZoomed="alltime";
       }
     }
 
@@ -76,10 +55,10 @@ cat <<EOF | sudo tee $DATA/index.html
       setTimeout(approach_range, 25);
     }
 
-    function zoom(days) {
+    function zoom(hours) {
       var w = g6.xAxisExtremes();
-      res = days * 86400;
-      if (days != 0) {
+      res = hours * 3600;
+      if (hours != 0) {
         desired_range = [ w[1] - res * 1000, w[1] ];
       } else {
         desired_range = orig_range;
@@ -151,13 +130,14 @@ cat <<EOF | sudo tee $DATA/index.html
     <div class="btn-group-my">
       <div style="display:inline-block" class="muted">Zoom: </div>
       <div class="btn-group" data-toggle="buttons-checkbox">
-        <button type="button" id="zoom1" onclick="updateZoom(1);" class="btn btn-mini zoom">1 day</button>
-        <button type="button" id="zoom7" onclick="updateZoom(7);" class="btn btn-mini zoom">1 week</button>
-        <button type="button" id="zoom30" onclick="updateZoom(30);" class="btn btn-mini zoom">1 month</button>
-        <button type="button" id="zoom90" onclick="updateZoom(90);" class="btn btn-mini zoom">3 months</button>
-        <button type="button" id="zoom180" onclick="updateZoom(180);" class="btn btn-mini zoom">6 months</button>
-        <button type="button" id="zoom365" onclick="updateZoom(365);" class="btn btn-mini zoom">1 year</button>
-        <button type="button" id="zoom1095" onclick="updateZoom(1095);" class="btn btn-mini zoom">3 years</button>
+        <button type="button" id="zoom1" onclick="updateZoom(1);" class="btn btn-mini zoom">1 hour</button>
+        <button type="button" id="zoom24" onclick="updateZoom(1*24);" class="btn btn-mini zoom">1 day</button>
+        <button type="button" id="zoom168" onclick="updateZoom(7*24);" class="btn btn-mini zoom">1 week</button>
+        <button type="button" id="zoom720" onclick="updateZoom(30*24);" class="btn btn-mini zoom">1 month</button>
+        <button type="button" id="zoom2160" onclick="updateZoom(90*24);" class="btn btn-mini zoom">3 months</button>
+        <button type="button" id="zoom4320" onclick="updateZoom(180*24);" class="btn btn-mini zoom">6 months</button>
+        <button type="button" id="zoom8760" onclick="updateZoom(365*24);" class="btn btn-mini zoom">1 year</button>
+        <button type="button" id="zoom26280" onclick="updateZoom(1095*24);" class="btn btn-mini zoom">3 years</button>
         <button type="button" id="zoom0" onclick="updateZoom(0);" class="btn btn-mini zoom">all time</button>
       </div>
     </div>
