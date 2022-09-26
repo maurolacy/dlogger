@@ -41,11 +41,11 @@ cat <<EOF | sudo tee $DATA/index.html
       } else {
         var new_range;
         new_range = [0.5 * (desired_range[0] + range[0]), 0.5 * (desired_range[1] + range[1])];
-        g1.updateOptions({dateWindow: desired_range});
-        g2.updateOptions({dateWindow: desired_range});
-        g3.updateOptions({dateWindow: desired_range});
-        g4.updateOptions({dateWindow: desired_range});
-        g5.updateOptions({dateWindow: desired_range});
+        g1.updateOptions({dateWindow: new_range});
+        g2.updateOptions({dateWindow: new_range});
+        g3.updateOptions({dateWindow: new_range});
+        g4.updateOptions({dateWindow: new_range});
+        g5.updateOptions({dateWindow: new_range});
         g6.updateOptions({dateWindow: new_range});
         animate();
       }
