@@ -1,7 +1,13 @@
+Database
+  - Simplify tables structure
+    - Remove duration / interval fields
+
 Complete install instructions
- - Set database password during install (done)
- - Test steps
+ - Test steps / re-install
  - Create missing install scripts (sensors)
+
+Fix corrupted data / zero bytes on reboot / crash
+  mean_temperature.txt (append mode)
 
 Use start-stop-daemon(done for humidity/pressure)
   Fix logging (syslog?)
@@ -9,6 +15,7 @@ Use start-stop-daemon(done for humidity/pressure)
 Plot infrastructure
   - dygraphs (done)
   - Add selections for: all data, yearly, monthly, weekly, daily (done)
+  - Add selected button highlight
 
 - humidity
   Fix / use kernel driver (dht11) (wip)
