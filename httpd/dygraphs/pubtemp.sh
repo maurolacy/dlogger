@@ -4,5 +4,5 @@
 LOG=$BASE/logs/`basename $0 .sh`.log
 
 mysql -u$US -p$PASS $DB <<EOF >$DATA/temp.txt
-SELECT \`ts\`, \`temp\` FROM \`pressure\`;
+SELECT \`ts\`, \`temp\` FROM \`pressure\` WHERE \`ts\` > CURRENT_TIMESTAMP - INTERVAL $INTERVAL;
 EOF

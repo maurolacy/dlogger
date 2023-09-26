@@ -13,9 +13,9 @@ Use start-stop-daemon(done for humidity/pressure)
   Fix logging (syslog?)
 
 Plot infrastructure
-  - dygraphs (done)
-  - Add selections for: all data, yearly, monthly, weekly, daily (done)
   - Add selected button highlight
+
+-temperature
 
 - humidity
   Fix / use kernel driver (dht11) (wip)
