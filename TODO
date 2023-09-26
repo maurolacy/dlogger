@@ -2,12 +2,8 @@ Use start-stop-daemon(done for humidity/pressure)
   Fix logging (syslog?)
 
 Plot infrastructure
-  - dygraphs (done)
-  - Add selections for: all data, yearly, monthly, weekly, daily
 
 -temperature
-  - average of both sensors (pressure and humidity)
-  - plot custom bars
 
 - humidity
   fix / use kernel driver (dht11)
